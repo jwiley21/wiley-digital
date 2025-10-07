@@ -1,142 +1,120 @@
-// supabase/functions/chat/index.ts
+// Edge Function: chat — Wiley Digital
+// Deno runtime, no third-party deps
 
-// ===== Env =====
+// ── ENV ────────────────────────────────────────────────────────────────────────
 const ALLOWED_ORIGIN = Deno.env.get("ALLOWED_ORIGIN") ?? "*";
-const LLM_PROVIDER   = Deno.env.get("LLM_PROVIDER")   ?? "groq";
 const GROQ_API_KEY   = Deno.env.get("GROQ_API_KEY")   ?? "";
-const KNOWLEDGE_URL  = Deno.env.get("KNOWLEDGE_URL")  ?? ""; // e.g. http://127.0.0.1:5500/public/knowledge.json
+const GROQ_MODEL     = Deno.env.get("GROQ_MODEL")     ?? "llama-3.1-8b-instant";
+const KNOWLEDGE_URL  = Deno.env.get("KNOWLEDGE_URL")  ?? "";
 
-// ===== Types & utils =====
-type Msg = { role: "system" | "user" | "assistant"; content: string };
-type FAQ = { q: string; a: string };
+// ── TYPES ─────────────────────────────────────────────────────────────────────
+type Role = "system" | "user" | "assistant";
+interface ChatMessage { role: Role; content: string; }
 
-
+// ── CORS ──────────────────────────────────────────────────────────────────────
 function corsHeaders(): Headers {
   return new Headers({
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-    "Access-Control-Allow-Headers": "content-type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "access-control-allow-origin": ALLOWED_ORIGIN, // "*" while testing; tighten later
+    "access-control-allow-headers": "authorization, content-type, x-client-info, apikey",
+    "access-control-allow-methods": "POST, OPTIONS",
+    "vary": "Origin",
   });
 }
 
-// Tiny in-memory rate limiter: 3 req / 15s / IP
-type RateBucket = Map<string, number[]>;
-declare global { var __rateBucket: RateBucket | undefined; }
-const rateBucket: RateBucket = globalThis.__rateBucket ?? new Map<string, number[]>();
-globalThis.__rateBucket = rateBucket;
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+function normalizeRole(r: unknown): Role {
+  return r === "assistant" || r === "system" ? r : "user";
+}
+function coerceMessages(value: unknown): ChatMessage[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((v): ChatMessage => {
+    if (isRecord(v)) {
+      const role = normalizeRole(v.role);
+      const content = typeof v.content === "string" ? v.content : String(v.content ?? "");
+      return { role, content };
+    }
+    return { role: "user", content: String(v) };
+  });
+}
 
-// ===== Knowledge loader (with 60s cache) =====
-let knowledgeCache = { text: "", ts: 0 };
-async function loadKnowledge(): Promise<string> {
-  const now = Date.now();
-  if (knowledgeCache.text && now - knowledgeCache.ts < 60_000) return knowledgeCache.text;
+async function fetchKnowledge(): Promise<string> {
   if (!KNOWLEDGE_URL) return "";
-
   try {
-    const r = await fetch(KNOWLEDGE_URL, { headers: { "Accept": "application/json" } });
+    const r = await fetch(KNOWLEDGE_URL, { cache: "no-store" });
     if (!r.ok) return "";
-    const data = await r.json();
-
-    const lines: string[] = [];
-    if (data.company)  lines.push(`Company: ${data.company}`);
-    if (data.tagline)  lines.push(`Tagline: ${data.tagline}`);
-    if (Array.isArray(data.services)) lines.push(`Services: ${data.services.join(", ")}`);
-    if (data.pricing) {
-      const p = data.pricing;
-      lines.push(
-        `Pricing: basic=${p.basic_site ?? "n/a"}, advanced=${p.advanced_site ?? "n/a"}, chatbot_addon=${p.chatbot_addon ?? "n/a"}`
-      );
-    }
-    if (Array.isArray(data.faqs)) {
-      const faqs = data.faqs as FAQ[];
-      lines.push("Top FAQs:");
-      lines.push(...faqs.slice(0, 8).map((f, i) => `${i + 1}. Q: ${f.q} A: ${f.a}`));
-    }
-
-
-    knowledgeCache = { text: lines.join("\n"), ts: now };
-    return knowledgeCache.text;
+    const json = await r.json();
+    // keep prompt small
+    return JSON.stringify(json).slice(0, 20_000);
   } catch {
     return "";
   }
 }
 
-// ===== LLM (Groq) =====
-async function callLLM(messages: Msg[]) {
-  if (LLM_PROVIDER !== "groq") {
-    return { reply: `Unsupported provider '${LLM_PROVIDER}'. Set LLM_PROVIDER=groq.` };
-  }
+async function callGroq(messages: ChatMessage[]): Promise<string> {
   if (!GROQ_API_KEY) {
-    return { reply: "GROQ_API_KEY missing on server." };
+    throw new Error("Missing GROQ_API_KEY");
   }
-
-  const context = await loadKnowledge();
-
-  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${GROQ_API_KEY}`,
+      "authorization": `Bearer ${GROQ_API_KEY}`,
+      "content-type": "application/json",
     },
-    // System prompt + context + chat history
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.5,
-      messages: [  
-        { role: "system", content: "You are Wiley Digital's assistant. Use provided context faithfully; if missing, say you don't know, and ask clarifying questions before estimating." },
-        ...(context ? [{ role: "system", content: `Context:\n${context}` } as Msg] : []),
-        ...messages
-      ],
+      model: GROQ_MODEL,
+      temperature: 0.3,
+      messages, // OpenAI-compatible format
     }),
   });
-
-  if (!resp.ok) {
-    const errText = await resp.text();
-    console.error("Groq error:", resp.status, errText);
-    return { reply: `Groq error (${resp.status}): ${errText}` };
-    // Example 400 if model name is wrong; example 429 if rate-limited.
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`GROQ ${res.status}: ${text}`);
   }
-
-  const json = await resp.json();
-  const reply = json?.choices?.[0]?.message?.content ?? "…";
-  return { reply };
+  const data = await res.json();
+  const reply = data?.choices?.[0]?.message?.content ?? "";
+  return reply;
 }
 
-// ===== HTTP handler =====
+// ── HANDLER ───────────────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
+  // Preflight
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders(), status: 204 });
+    return new Response(null, { status: 204, headers: corsHeaders() });
   }
+
+  const headers = corsHeaders();
+  headers.set("content-type", "application/json");
+
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
-      headers: { ...Object.fromEntries(corsHeaders()), "Content-Type": "application/json" },
+      headers,
     });
   }
 
   try {
-    const { messages = [] } = (await req.json()) as { messages?: Msg[] };
+    // Body: { messages: ChatMessage[] (user/assistant history) }
+    const bodyUnknown = await req.json().catch(() => ({}));
+    const msgs = isRecord(bodyUnknown) ? coerceMessages(bodyUnknown["messages"]) : [];
 
-    // Rate limit
-    const ip = req.headers.get("x-forwarded-for") ?? "anon";
-    const now = Date.now();
-    const recent = (rateBucket.get(ip) ?? []).filter((t) => now - t < 15_000);
-    if (recent.length >= 3) {
-      return new Response(JSON.stringify({ error: "Too many requests" }), {
-        status: 429,
-        headers: { ...Object.fromEntries(corsHeaders()), "Content-Type": "application/json" },
-      });
-    }
-    rateBucket.set(ip, [...recent, now]);
+    const kb = await fetchKnowledge();
+    const system: ChatMessage = {
+      role: "system",
+      content: [
+        "You are Jackson's Wiley Digital assistant.",
+        "Be concise and helpful about websites, web apps, AI solutions, and the portfolio.",
+        kb ? `Knowledge (may be partial): ${kb}` : "",
+      ].filter(Boolean).join("\n\n"),
+    };
 
-    const result = await callLLM(messages);
-    return new Response(JSON.stringify(result), {
-      headers: { ...Object.fromEntries(corsHeaders()), "Content-Type": "application/json" },
-    });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error)?.message ?? "Server error" }), {
-      status: 500,
-      headers: { ...Object.fromEntries(corsHeaders()), "Content-Type": "application/json" },
-    });
+    const groqMessages: ChatMessage[] = [system, ...msgs];
+    const reply = await callGroq(groqMessages);
+
+    return new Response(JSON.stringify({ reply }), { status: 200, headers });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers });
   }
 });

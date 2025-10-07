@@ -1,5 +1,8 @@
-const TEMPLATES_URL = "https://jwiley21.github.io/wiley-digital/assets/data/templates.json";
-fetch(TEMPLATES_URL) /* ... */;
+
+const isGhPages = location.hostname.endsWith('github.io');
+const repo = isGhPages ? `/${location.pathname.split('/').filter(Boolean)[0] || ''}` : '';
+const TEMPLATES_URL = `${repo}/assets/data/templates.json`;
+
 
 
 // Load header/footer includes, then initialize interactions

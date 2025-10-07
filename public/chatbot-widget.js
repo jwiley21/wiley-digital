@@ -7,7 +7,7 @@
   const CONFIG = {
     apiUrl: isLocalHost
       ? "http://localhost:54321/functions/v1/chat"              // local supabase functions serve
-      : "https://yivecykpaykggtxlsvit.functions.supabase.co/chat", // prod function URL (replace!)
+      : "https://yivecykpaykggtxlsvit.supabase.co/functions/v1/chat", // prod function URL (replace!)
 
     title: "Ask Jackson's AI",
     subtitle: "Websites • Apps • AI",
