@@ -97,6 +97,11 @@ body::after{ content: ""; position: fixed; inset: -20% -20% -20% -20%; pointer-e
 .card h3{ margin: 6px 0 8px; }
 .card .muted{ color: var(--muted); }
 
+/* Services list (light bullets) */
+.service-list{ margin: 8px 0 0; color: var(--muted); }
+.service-list li{ display:flex; align-items:flex-start; gap:8px; margin:6px 0; }
+.service-list li::before{ content: "•"; color: var(--accent); opacity:.9; display:inline-block; width:14px; transform: translateY(2px); }
+
 /* Section dividers */
 .section.is-contrast{ background: linear-gradient(180deg, rgba(18,22,33,0.7), rgba(18,22,33,0.5)); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
 .section-header{ display:flex; align-items:center; gap:12px; margin-bottom: 18px; }
@@ -110,6 +115,8 @@ body::after{ content: ""; position: fixed; inset: -20% -20% -20% -20%; pointer-e
 .footer-brand{ font-weight:700; padding-top:6px; }
 .footer-legal p{ margin:0; font-size:.9rem; color: var(--muted); }
 .footer-links{ display:flex; gap:16px; }
+.footer-links{ flex-wrap: wrap; }
+.nav-toggle .hamburger{ font-size: 20px; line-height: 1; }
 .footer-links li a{ display:inline-block; padding:6px 0; color: var(--muted); }
 .footer-links li a:hover{ color: var(--text); }
 
@@ -160,6 +167,7 @@ body::after{ content: ""; position: fixed; inset: -20% -20% -20% -20%; pointer-e
   .hero-grid{ grid-template-columns:1fr; }
   .cards{ grid-template-columns:1fr; }
   .footer-grid{ grid-template-columns:1fr; gap:10px; }
+  .footer-links{ justify-content: flex-start; gap: 12px 14px; }
 }
 
 /* --- Clean scroll + anchor offset (sticky header) --- */
@@ -275,6 +283,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   overflow: hidden;
 }
 .template-card img { width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Small tech tags for portfolio cards */
+.tag-list{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 0; }
+.tag{ padding:4px 8px; border-radius:999px; font-size:.8rem; color: var(--text);
+  background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); }
 
 /* Preview modal */
 .tpl-modal[hidden] { display:none; }

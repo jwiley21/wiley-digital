@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Contact - Wiley Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Start your project with Wiley Digital. Websites, web apps, and AI tools for small businesses in Cincinnati.">
+  <meta property="og:title" content="Contact - Wiley Digital">
+  <meta property="og:description" content="Start your project with Wiley Digital. Websites, web apps, and AI tools for small businesses in Cincinnati.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jwiley21.github.io/wiley-digital/contact.html">
+  <meta property="og:image" content="https://jwiley21.github.io/wiley-digital/assets/img/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact - Wiley Digital">
+  <meta name="twitter:description" content="Start your project with Wiley Digital. Websites, web apps, and AI tools for small businesses in Cincinnati.">
+  <meta name="twitter:image" content="https://jwiley21.github.io/wiley-digital/assets/img/og-image.jpg">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script defer data-domain="jwiley21.github.io" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+  <div data-include="partials/header.html"></div>
+  <main>
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-header"><span class="rule"></span><span class="label">Contact</span></div>
+        <h2>Let’s talk about your idea</h2>
+        <p class="muted" style="max-width:800px">I’m Jackson Wiley, based in Cincinnati. I help small businesses, startups, and creators launch modern websites and AI tools. Share a few details and I’ll get back to you—usually within a day. No pressure — just tell me what you’d like to build.</p>
+
+        <form id="contact-form" class="reveal" data-endpoint="" novalidate style="margin-top:14px;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <label>
+              <span class="sr-only">Your name</span>
+              <input type="text" name="name" placeholder="Your name" required style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background: var(--panel); color: var(--text);"/>
+            </label>
+            <label>
+              <span class="sr-only">Email</span>
+              <input type="email" name="email" placeholder="Email" required style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background: var(--panel); color: var(--text);"/>
+            </label>
+          </div>
+          <label>
+            <span class="sr-only">Message</span>
+            <textarea name="message" rows="6" placeholder="What would you like to build?" required style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background: var(--panel); color: var(--text);"></textarea>
+          </label>
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <div class="btn-row" style="margin-top:12px; align-items:center; gap:10px;">
+            <button type="submit" class="btn-cta">Send Message</button>
+            <span class="muted" id="form-hint">No pressure — just share what you’d like to build.</span>
+          </div>
+          <div id="form-status" role="status" aria-live="polite" style="margin-top:10px; color: var(--muted);"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div data-include="partials/footer.html"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+  (function(){
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('form-status');
+      const endpoint = form.dataset.endpoint || '';
+      if (!endpoint){
+        status.textContent = 'Add your Formspree endpoint in the form\'s data-endpoint attribute.';
+        return;
+      }
+      status.textContent = 'Sending…';
+      const data = new FormData(form);
+      try{
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        });
+        if (res.ok){
+          form.reset();
+          status.style.color = '#23d5ab';
+          status.textContent = 'Thanks! Your message was sent.';
+        } else {
+          status.style.color = '#e5e7eb';
+          status.textContent = 'Something went wrong. Please email me directly: '; 
+          const a = document.createElement('a'); a.href='mailto:hello@wiley.digital'; a.textContent = 'hello@wiley.digital';
+          status.appendChild(a);
+        }
+      }catch(err){
+        status.style.color = '#e5e7eb';
+        status.textContent = 'Network error. Please try again or email me directly: ';
+        const a = document.createElement('a'); a.href='mailto:hello@wiley.digital'; a.textContent = 'hello@wiley.digital';
+        status.appendChild(a);
+      }
+    });
+  })();
+  </script>
+  <script src="public/chatbot-widget.js" defer></script>
+</body>
+</html>

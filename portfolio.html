@@ -2,94 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Portfolio — Wiley Digital</title>
+  <title>Portfolio - Wiley Digital</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Selected projects by Wiley Digital: web apps, AI tools, and modern websites for small businesses.">
+  <meta property="og:title" content="Portfolio - Wiley Digital">
+  <meta property="og:description" content="Selected projects by Wiley Digital: web apps, AI tools, and modern websites for small businesses.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jwiley21.github.io/wiley-digital/portfolio.html">
+  <meta property="og:image" content="https://jwiley21.github.io/wiley-digital/assets/img/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portfolio - Wiley Digital">
+  <meta name="twitter:description" content="Selected projects by Wiley Digital: web apps, AI tools, and modern websites for small businesses.">
+  <meta name="twitter:image" content="https://jwiley21.github.io/wiley-digital/assets/img/og-image.jpg">
   <link rel="stylesheet" href="assets/css/styles.css">
+  <script defer data-domain="jwiley21.github.io" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
   <div data-include="partials/header.html"></div>
   <main>
-    <section class="section">
+    <section class="section" id="portfolio">
       <div class="container">
         <div class="section-header"><span class="rule"></span><span class="label">Portfolio</span></div>
-        <h2>Selected work</h2>
-        <p class="muted">A few projects I’ve been building. Most of these I've just made for fun or to showcase, as many things I can't share publicly. I'll keep adding more over time. Some of them many people use, and some of them pretty much no one uses. I try to keep these updated and working but as I work on client projects or more important personal projects, some may become outdated, break, or a hosting service may stop hosting it.</p>
+        <h2>Selected Work</h2>
+        <p class="muted">Real projects that keep users engaged and help small businesses run smoother. I’ll continue adding more as they launch.</p>
 
         <div class="cards" style="margin-top:16px;">
-          <!-- 1) Filled example (matches Websites preview card style) -->
-          <article class="card template-card">
+          <!-- Ball Knowledge -->
+          <article class="card template-card reveal">
             <div class="template-thumb">
-              <!-- If you have a real screenshot, replace the image src below -->
-              <img src="assets/portfolio/ballknowledge.jpg" alt="Ball Knowledge NFL game UI" loading="lazy">
+              <img loading="lazy" width="1200" height="750" alt="Ball Knowledge game screenshot (placeholder)"
+                   src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='750'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%23151a28'/><stop offset='100%' stop-color='%230b0d12'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23a5adba' font-family='Inter, Arial' font-size='36'>Ball Knowledge — image coming soon</text></svg>">
             </div>
             <h3>Ball Knowledge — NFL</h3>
-            <p class="muted">NFL player-guessing game with daily game (new player auto set everyday), timed game (get as many right in 2 mins), and a practice mode. Leaderboards are live and users are locked to one account on browser.</p>
-            <div class="btn-row">
-              <!-- Swap # with your real links or remove if private -->
+            <p class="muted">Daily NFL guessing game that keeps fans returning with fresh challenges and a live Supabase leaderboard.</p>
+            <ul class="tag-list">
+              <li class="tag">Supabase</li>
+              <li class="tag">Postgres</li>
+              <li class="tag">JavaScript</li>
+            </ul>
+            <div class="btn-row" style="margin-top:10px;">
               <a class="btn" href="https://ball-knowledge-ae9r.onrender.com/" target="_blank" rel="noopener">Live</a>
-              
             </div>
           </article>
 
-          <!-- 2) Placeholder -->
-          <article class="card template-card">
+          <!-- Bearcat GPT -->
+          <article class="card template-card reveal">
             <div class="template-thumb">
-              <!-- If you have a real screenshot, replace the image src below -->
-              <img src="assets/portfolio/birthplaceguesser.jpg" alt="Birthplace Guesser" loading="lazy">
+              <img loading="lazy" width="1200" height="750" alt="Bearcat GPT chatbot screenshot (placeholder)"
+                   src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='750'><defs><linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%23151a28'/><stop offset='100%' stop-color='%230b0d12'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g2)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23a5adba' font-family='Inter, Arial' font-size='36'>Bearcat GPT — image coming soon</text></svg>">
             </div>
-            <h3>Birth Place Guesser</h3>
-            <p class="muted">Users have to guess where on a blank map a famous person was born. The closer you get, the more points you get. Leaderboards are live and google sign in works.</p>
-            <div class="btn-row">
-              <!-- Swap # with your real links or remove if private -->
-              <a class="btn" href="https://birthplaceguesser.lovable.app/" target="_blank" rel="noopener">Live</a>
-              
+            <h3>Bearcat GPT</h3>
+            <p class="muted">UC-focused AI chatbot that answers campus questions instantly with private RAG search and sources.</p>
+            <ul class="tag-list">
+              <li class="tag">RAG</li>
+              <li class="tag">Supabase</li>
+              <li class="tag">TypeScript</li>
+            </ul>
+            <div class="btn-row" style="margin-top:10px;">
+              <a class="btn" href="#" aria-disabled="true">Live soon</a>
             </div>
           </article>
 
-          <!-- 3) Placeholder -->
-          <article class="card template-card">
-            <div class="template-thumb"></div>
-            <h3 class="muted">Coming soon</h3>
-            <p class="muted">Project details pending.</p>
+          <!-- Cafe Vista (placeholder small business site) -->
+          <article class="card template-card reveal">
+            <div class="template-thumb">
+              <img loading="lazy" width="1200" height="750" alt="Cafe Vista website screenshot (placeholder)"
+                   src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='750'><defs><linearGradient id='g3' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%23151a28'/><stop offset='100%' stop-color='%230b0d12'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g3)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23a5adba' font-family='Inter, Arial' font-size='36'>Cafe Vista — image coming soon</text></svg>">
+            </div>
+            <h3>Cafe Vista</h3>
+            <p class="muted">Local coffee shop site with online menu, review links, and simple forms to book events or catering.</p>
+            <ul class="tag-list">
+              <li class="tag">Static Site</li>
+              <li class="tag">SEO</li>
+              <li class="tag">Forms</li>
+            </ul>
+            <div class="btn-row" style="margin-top:10px;">
+              <a class="btn" href="#" aria-disabled="true">Preview soon</a>
+            </div>
           </article>
 
-          <!-- 4) Placeholder -->
-          <article class="card template-card">
-            <div class="template-thumb"></div>
-            <h3 class="muted">Coming soon</h3>
-            <p class="muted">Project details pending.</p>
-          </article>
-
-          <!-- 5) Placeholder -->
-          <article class="card template-card">
-            <div class="template-thumb"></div>
-            <h3 class="muted">Coming soon</h3>
-            <p class="muted">Project details pending.</p>
-          </article>
-
-          <!-- 6) Placeholder -->
-          <article class="card template-card">
-            <div class="template-thumb"></div>
-            <h3 class="muted">Coming soon</h3>
-            <p class="muted">Project details pending.</p>
-          </article>
+          <!-- Additional slots reserved for future projects -->
         </div>
       </div>
-
     </section>
   </main>
   <div data-include="partials/footer.html"></div>
   <script src="assets/js/main.js"></script>
-
-  <script>
-  (function() {
-    var s = document.createElement('script');
-    s.src = 'public/chatbot-widget.js';
-    s.defer = true;
-    document.head.appendChild(s);
-  })();
-  </script>
-
+  <script src="public/chatbot-widget.js" defer></script>
 
 </body>
 </html>

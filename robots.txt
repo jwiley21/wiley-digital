@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jwiley21.github.io/wiley-digital/sitemap.xml
+
