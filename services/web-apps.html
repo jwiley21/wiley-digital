@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Web Apps — Wiley Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <div data-include="../partials/header.html"></div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <p class="kicker">Services</p>
+            <h1>Custom web applications</h1>
+            <p class="subhead">Dashboards, auth, payments, and integrations — from MVP to production.</p>
+            <div class="btn-row">
+              <a class="btn-cta" href="#contact">Start a project</a>
+              <a class="btn" href="../index.html#portfolio">View portfolio</a>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h3>What I deliver</h3>
+            <ul class="muted">
+              <li>• Auth (email/OAuth), roles, and permissions</li>
+              <li>• CRUD dashboards, charts, and reports</li>
+              <li>• Payments, webhooks, and background jobs</li>
+            </ul>
+            <h3 style="margin-top:10px;">Tech & tools</h3>
+            <p class="muted">FastAPI/Flask, Postgres/Supabase, Stripe, Tailwind, Vite.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section is-contrast">
+      <div class="container">
+        <div class="section-header"><span class="rule"></span><span class="label">Process</span></div>
+        <div class="cards" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+          <article class="card"><h3>1) Define</h3><p class="muted">MVP scope, data model, and user flows.</p></article>
+          <article class="card"><h3>2) Build</h3><p class="muted">APIs, UI, and integrations with solid testing.</p></article>
+          <article class="card"><h3>3) Ship</h3><p class="muted">Deploy, observability, and docs.</p></article>
+        </div>
+        <div class="cta-row" style="margin-top:16px;"><a class="section-cta section-cta--apps" href="#contact">Build my app →</a></div>
+      </div>
+    </section>
+  </main>
+  <div data-include="../partials/footer.html"></div>
+  <script src="../assets/js/main.js"></script>
+
+  <script>
+  (function() {
+    var s = document.createElement('script');
+    s.src = '/public/chatbot-widget.js';
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
+  </script>
+
+
+</body>
+</html>

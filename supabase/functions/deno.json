@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "types": ["jsr:@supabase/functions-js/edge-runtime"]
+  },
+  "lint": { "rules": { "tags": ["recommended"] } }
+}

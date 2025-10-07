@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/business/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Glass Business - iOS 26 Theme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        /* --- Animated Gradient Background --- */
+        .gradient-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+        }
+
+        .shape1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            left: -200px;
+            background: rgba(0, 122, 255, 0.5); /* iOS Blue */
+            animation: move1 25s infinite alternate;
+        }
+
+        .shape2 {
+            width: 500px;
+            height: 500px;
+            bottom: -150px;
+            right: -150px;
+            background: rgba(255, 45, 85, 0.5); /* iOS Pink/Red */
+            animation: move2 30s infinite alternate;
+        }
+        
+        .shape3 {
+            width: 400px;
+            height: 400px;
+            bottom: 50%;
+            right: 50%;
+            transform: translate(50%, 50%);
+            background: rgba(52, 199, 89, 0.4); /* iOS Green */
+            animation: move3 20s infinite alternate;
+        }
+
+        @keyframes move1 {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(200px, 300px) rotate(360deg); }
+        }
+        @keyframes move2 {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(-300px, -200px) rotate(-360deg); }
+        }
+         @keyframes move3 {
+            from { transform: scale(1) rotate(0deg); }
+            to { transform: scale(1.5) rotate(180deg); }
+        }
+
+
+        /* --- Liquid Glass Effect --- */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(50px);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 2rem; /* 32px */
+        }
+        
+        /* Softer version for buttons, etc. */
+        .liquid-glass-light {
+            background: rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="gradient-background">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10">
+
+        <!-- Header -->
+        <header class="fixed top-0 left-0 right-0 z-50">
+            <div class="container mx-auto px-6 py-4">
+                <nav class="flex items-center justify-between liquid-glass-light rounded-full p-2 px-6">
+                    <a href="#" class="text-xl font-bold tracking-wider flex items-center gap-3 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                        <span>Your Agency</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                        <a href="#services" class="hover:text-white transition-colors">Services</a>
+                        <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+                        <a href="#portfolio" class="hover:text-white transition-colors">Portfolio</a>
+                        <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+                    </div>
+                    <a href="#contact" class="hidden md:block bg-white/90 hover:bg-white text-black text-sm font-semibold py-2 px-5 rounded-full transition-colors">
+                        Get a Quote
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-6 pt-32">
+
+            <!-- Hero Section -->
+            <section class="min-h-[75vh] flex items-center justify-center text-center py-16">
+                 <div class="liquid-glass w-full p-8 md:p-16">
+                    <div class="inline-block bg-blue-500/80 text-white rounded-full px-4 py-1 text-sm mb-6 font-semibold">
+                        Optimized for iOS 26 - customizable backgrounds and liquid glass
+                    </div>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 text-white">
+                        Build Your Future-Proof Website
+                    </h1>
+                    <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 mb-10 leading-relaxed">
+                        We create stunning, high-performance websites with a modern aesthetic to elevate your brand and accelerate your growth.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="#pricing" class="w-full sm:w-auto bg-white/90 hover:bg-white text-black font-semibold py-3 px-8 rounded-full text-lg transition-colors shadow-lg">
+                            View Plans
+                        </a>
+                        <a href="#portfolio" class="w-full sm:w-auto liquid-glass-light hover:bg-white/10 text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors">
+                            Our Work
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services" class="py-16 md:py-24">
+                <div class="liquid-glass p-8 md:p-12">
+                    <div class="text-center mb-12">
+                        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Our Services</h2>
+                        <p class="text-gray-300 mt-4 text-lg">We offer a complete suite of services to build your online presence.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 bg-white/5 rounded-2xl">
+                            <div class="bg-white/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                               <i data-lucide="code" class="w-8 h-8 text-blue-300"></i>
+                            </div>
+                            <h3 class="text-2xl font-semibold mb-3 text-white">Web Development</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                               Custom-coded websites that are fast, secure, and scalable for your business needs.
+                            </p>
+                        </div>
+                        <div class="text-center p-6 bg-white/5 rounded-2xl">
+                           <div class="bg-white/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                                <i data-lucide="figma" class="w-8 h-8 text-green-300"></i>
+                            </div>
+                            <h3 class="text-2xl font-semibold mb-3 text-white">UI/UX Design</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                               Intuitive and beautiful user interfaces designed to provide an exceptional user experience.
+                            </p>
+                        </div>
+                        <div class="text-center p-6 bg-white/5 rounded-2xl">
+                           <div class="bg-white/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                                <i data-lucide="trending-up" class="w-8 h-8 text-red-300"></i>
+                            </div>
+                            <h3 class="text-2xl font-semibold mb-3 text-white">SEO Optimization</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                               Improve your search engine ranking and drive organic traffic with our proven SEO strategies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing Section -->
+            <section id="pricing" class="py-16 md:py-24">
+                <div class="liquid-glass p-8 md:p-12">
+                    <div class="text-center mb-12">
+                        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Flexible Pricing Plans</h2>
+                        <p class="text-gray-300 mt-4 text-lg">Choose a plan that scales with your business.</p>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        <!-- Plan 1 -->
+                        <div class="bg-white/5 rounded-2xl p-8 flex flex-col">
+                            <h3 class="text-2xl font-semibold text-white">Starter</h3>
+                            <p class="text-4xl font-bold my-4 text-white">$499 <span class="text-lg font-medium text-gray-300">/one-time</span></p>
+                            <ul class="space-y-3 text-gray-300 mb-6 flex-grow">
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> 3-Page Website</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Responsive Design</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Basic SEO</li>
+                            </ul>
+                            <button class="w-full mt-auto liquid-glass-light hover:bg-white/10 text-white font-semibold py-3 rounded-full transition-colors">Choose Plan</button>
+                        </div>
+                        <!-- Plan 2 (Highlighted) -->
+                        <div class="bg-blue-500/10 rounded-2xl p-8 flex flex-col border-2 border-blue-400 transform scale-105">
+                            <h3 class="text-2xl font-semibold text-white">Business</h3>
+                            <p class="text-4xl font-bold my-4 text-white">$1299 <span class="text-lg font-medium text-gray-300">/one-time</span></p>
+                            <ul class="space-y-3 text-gray-300 mb-6 flex-grow">
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> 10-Page Website</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Custom UI/UX</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Advanced SEO</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> CMS Integration</li>
+                            </ul>
+                            <button class="w-full mt-auto bg-white/90 hover:bg-white text-black font-semibold py-3 rounded-full transition-colors">Choose Plan</button>
+                        </div>
+                        <!-- Plan 3 -->
+                        <div class="bg-white/5 rounded-2xl p-8 flex flex-col">
+                             <h3 class="text-2xl font-semibold text-white">Enterprise</h3>
+                            <p class="text-4xl font-bold my-4 text-white">Contact Us</p>
+                            <ul class="space-y-3 text-gray-300 mb-6 flex-grow">
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Unlimited Pages</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> E-commerce</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Dedicated Support</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="text-green-400"></i> Custom Solutions</li>
+                            </ul>
+                            <button class="w-full mt-auto liquid-glass-light hover:bg-white/10 text-white font-semibold py-3 rounded-full transition-colors">Contact Sales</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section id="testimonials" class="py-16 md:py-24">
+                 <div class="liquid-glass p-8 md:p-12">
+                    <div class="text-center mb-12">
+                        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">What Our Clients Say</h2>
+                        <p class="text-gray-300 mt-4 text-lg">Real feedback from our satisfied partners.</p>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white/5 rounded-2xl p-8">
+                            <p class="text-lg text-gray-300 italic mb-4">"The team delivered a website that exceeded our expectations. The design is stunning and our user engagement has skyrocketed. Highly recommended!"</p>
+                            <p class="font-bold text-white">Jane Doe</p>
+                            <p class="text-sm text-gray-400">CEO, Tech Innovators</p>
+                        </div>
+                         <div class="bg-white/5 rounded-2xl p-8">
+                            <p class="text-lg text-gray-300 italic mb-4">"A seamless process from start to finish. They understood our vision perfectly and brought it to life with incredible skill and professionalism."</p>
+                            <p class="font-bold text-white">John Smith</p>
+                            <p class="text-sm text-gray-400">Founder, Creative Co.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio Section -->
+            <section id="portfolio" class="py-16 md:py-24">
+                <div class="liquid-glass p-8 md:p-12">
+                   <div class="text-center mb-12">
+                       <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Our Recent Work</h2>
+                       <p class="text-gray-300 mt-4 text-lg">A glimpse into the quality and creativity of our projects.</p>
+                   </div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                       <div class="bg-white/5 rounded-2xl overflow-hidden group">
+                          <img src="https://placehold.co/800x600/000000/ffffff?text=Project+Alpha" alt="Portfolio 1" class="w-full h-auto object-cover">
+                           <div class="p-6">
+                               <h3 class="text-2xl font-semibold mb-2 text-white">Corporate Website Redesign</h3>
+                               <p class="text-gray-300">A complete overhaul for a leading tech firm.</p>
+                           </div>
+                       </div>
+                       <div class="bg-white/5 rounded-2xl overflow-hidden group">
+                          <img src="https://placehold.co/800x600/111111/ffffff?text=Project+Beta" alt="Portfolio 2" class="w-full h-auto object-cover">
+                           <div class="p-6">
+                               <h3 class="text-2xl font-semibold mb-2 text-white">E-commerce Platform</h3>
+                               <p class="text-gray-300">A custom-built online store for a fashion brand.</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-16 md:py-24">
+                <div class="liquid-glass max-w-4xl mx-auto p-8 md:p-12">
+                    <div class="text-center mb-12">
+                         <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">Let's Build Together</h2>
+                        <p class="text-gray-300 mt-4 text-lg">Ready to start your project? Drop us a line.</p>
+                    </div>
+                    <form action="#" method="POST" class="max-w-xl mx-auto">
+                        <div class="grid grid-cols-1 gap-6 mb-6">
+                            <input type="text" name="name" class="w-full bg-white/10 border-2 border-transparent focus:border-blue-400 rounded-xl px-4 py-3 text-white outline-none transition-all placeholder:text-gray-400" placeholder="Your Name">
+                            <input type="email" name="email" class="w-full bg-white/10 border-2 border-transparent focus:border-blue-400 rounded-xl px-4 py-3 text-white outline-none transition-all placeholder:text-gray-400" placeholder="Your Email">
+                            <textarea name="message" rows="5" class="w-full bg-white/10 border-2 border-transparent focus:border-blue-400 rounded-xl px-4 py-3 text-white outline-none transition-all placeholder:text-gray-400" placeholder="Tell us about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-white/90 hover:bg-white text-black font-semibold py-3 px-8 rounded-full text-lg transition-colors shadow-lg">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-20 pb-8">
+            <div class="container mx-auto px-6 text-center text-gray-400">
+                <p>&copy; 2025 Your Agency Name. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+

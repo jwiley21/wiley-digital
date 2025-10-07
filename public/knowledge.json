@@ -1,0 +1,21 @@
+{
+  "company": "Wiley Digital",
+  "tagline": "Websites • Apps • AI",
+  "services": [
+    "Custom websites (static or React)",
+    "Web apps (auth, DB, payments)",
+    "AI chatbots (FAQ automation, lead capture)"
+  ],
+  "pricing": {
+    "basic_site": "$1k–$3k",
+    "advanced_site": "$3k–$8k+",
+    "chatbot_addon": "$300–$1k depending on scope"
+  },
+  "faqs": [
+    { "q": "How long does a basic site take?", "a": "Usually 1–2 weeks once content is ready." },
+    { "q": "Do you build e-commerce?", "a": "Yes—Stripe and simple catalog setups." },
+    { "q": "Can you integrate a booking system?", "a": "Absolutely—Calendly, embedded forms, or custom flows." },
+    { "q": "What do you need from me?", "a": "Logo/brand, pages/sections, example sites, and your content." },
+    { "q": "Do you maintain sites?", "a": "Yes—maintenance plans available after launch." }
+  ]
+}
