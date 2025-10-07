@@ -15,6 +15,7 @@ function corsHeaders(): Headers {
   return new Headers({
     "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
     "Access-Control-Allow-Headers": "content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
   });
 }
 
@@ -104,7 +105,7 @@ async function callLLM(messages: Msg[]) {
 // ===== HTTP handler =====
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders() });
+    return new Response(null, { headers: corsHeaders(), status: 204 });
   }
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {

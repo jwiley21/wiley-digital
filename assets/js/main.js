@@ -99,7 +99,7 @@ const tplState = { items: [], filter: 'All' };
 
 async function initTemplateShowcase(){
   try{
-    const res = await fetch('/assets/data/templates.json');
+    const res = await fetch(TEMPLATES_URL);
     tplState.items = await res.json();
     renderFilters();
     renderTemplates();
