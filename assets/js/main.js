@@ -1,3 +1,7 @@
+const TEMPLATES_URL = "https://jwiley21.github.io/wiley-digital/assets/data/templates.json";
+fetch(TEMPLATES_URL) /* ... */;
+
+
 // Load header/footer includes, then initialize interactions
 async function loadIncludes() {
   const includeEls = document.querySelectorAll('[data-include]');

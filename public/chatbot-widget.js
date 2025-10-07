@@ -175,7 +175,7 @@
 
       const res = await fetch(CONFIG.apiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpdmVjeWtwYXlrZ2d0eGxzdml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzNzYyMTEsImV4cCI6MjA3NDk1MjIxMX0.qtRZW_XBH__G2R712U1t_MXX4bRCiAuw4DrVYCc_Kg0" },
         body: JSON.stringify({ messages: history.slice(-14) }) // last ~14 messages
       });
 
