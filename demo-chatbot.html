@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Demo Chatbot — Wiley Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Try a custom AI chatbot demo. Upload sample content, tweak settings, and ask a few questions.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="/wiley-digital/assets/img/favicon.svg?v=2" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon.svg?v=2" type="image/svg+xml">
+  <meta name="theme-color" content="#0b0d12">
+</head>
+<body>
+  <div data-include="partials/header.html"></div>
+  <main>
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section-header"><span class="rule"></span><span class="label">AI Demo</span></div>
+        <h2>Try a custom AI chatbot</h2>
+        <p class="muted">Upload a short text file or paste content, set a name and tone, then ask a few questions. You’ll get a feel for what a tailored bot can do. For a full build, <a href="/contact.html">contact me</a>.</p>
+
+        <div class="demo-grid" style="margin-top:16px;">
+          <article class="card">
+            <h3>1) Provide context</h3>
+            <div class="demo-controls">
+              <label class="muted">Paste sample content</label>
+              <textarea id="demo-context" rows="8" placeholder="Paste up to ~2,000 characters of helpful context (FAQs, product info, service details)"></textarea>
+              <div class="muted" style="margin:8px 0;">or upload a small .txt / .md file</div>
+              <input id="demo-file" type="file" accept=".txt,.md,.csv" />
+            </div>
+
+            <h3 style="margin-top:14px;">2) Bot settings</h3>
+            <div class="demo-controls">
+              <label class="muted">Bot name</label>
+              <input id="demo-name" type="text" placeholder="e.g., Cafe Vista Helper" />
+
+              <label class="muted" style="margin-top:8px;">Tone</label>
+              <select id="demo-tone">
+                <option value="friendly" selected>Friendly</option>
+                <option value="professional">Professional</option>
+                <option value="concise">Concise</option>
+                <option value="enthusiastic">Enthusiastic</option>
+              </select>
+
+              <label class="muted" style="margin-top:8px;">Creativity (temperature)</label>
+              <input id="demo-temp" type="range" min="0" max="1" step="0.05" value="0.2" />
+
+              <div class="btn-row" style="margin-top:10px;">
+                <button id="demo-start" class="btn-cta">Start demo</button>
+                <button id="demo-clear" class="btn">Reset</button>
+              </div>
+              <small class="muted">You’ll be able to ask up to 5 questions in this demo.</small>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>3) Chat</h3>
+            <div id="demo-chat" class="demo-chat-box">
+              <div class="demo-messages" id="demo-messages" aria-live="polite"></div>
+              <div class="demo-input" id="demo-input-wrap">
+                <input id="demo-input" type="text" placeholder="Type your question..." />
+                <button id="demo-send" class="btn">Send</button>
+              </div>
+              <div class="muted" id="demo-limit" style="display:none; margin-top:8px;">
+                Demo limit reached. <a href="/contact.html">Get a custom chatbot for your business →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="partials/footer.html"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/demo-chat.js" defer></script>
+</body>
+</html>
