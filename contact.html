@@ -18,7 +18,7 @@
   <link rel="icon" href="/wiley-digital/assets/img/favicon.svg?v=2" type="image/svg+xml">
   <link rel="icon" href="assets/img/favicon.svg?v=2" type="image/svg+xml">
   <meta name="theme-color" content="#0b0d12">
-  <script defer data-domain="jwiley21.github.io" src="https://plausible.io/js/script.js"></script>
+
 </head>
 <body>
   <div data-include="partials/header.html"></div>
@@ -29,7 +29,7 @@
         <h2>Let’s talk about your idea</h2>
         <p class="muted" style="max-width:800px">I’m Jackson Wiley, based in Cincinnati. I help small businesses, startups, and creators launch modern websites and AI tools. Share a few details and I’ll get back to you—usually within a day. No pressure — just tell me what you’d like to build.</p>
 
-        <form id="contact-form" class="reveal" data-endpoint="" novalidate style="margin-top:14px;">
+        <form id="contact-form" class="reveal" data-endpoint="https://contact-form.jacksonwileybusiness.workers.dev" novalidate style="margin-top:14px;">
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
             <label>
               <span class="sr-only">Your name</span>
@@ -84,13 +84,13 @@
         } else {
           status.style.color = '#e5e7eb';
           status.textContent = 'Something went wrong. Please email me directly: '; 
-          const a = document.createElement('a'); a.href='mailto:hello@wiley.digital'; a.textContent = 'hello@wiley.digital';
+          const a = document.createElement('a'); a.href='mailto:hello@wileydigital.tech'; a.textContent = 'hello@wileydigital.tech';
           status.appendChild(a);
         }
       }catch(err){
         status.style.color = '#e5e7eb';
         status.textContent = 'Network error. Please try again or email me directly: ';
-        const a = document.createElement('a'); a.href='mailto:hello@wiley.digital'; a.textContent = 'hello@wiley.digital';
+        const a = document.createElement('a'); a.href='mailto:hello@wileydigital.tech'; a.textContent = 'hello@wileydigital.tech';
         status.appendChild(a);
       }
     });
