@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instant Share - File Transfer Tool</title>
+  <meta name="description" content="Real-time peer-to-peer file sharing between devices using WebRTC and QR codes">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="assets/img/favicon.svg?v=2" type="image/svg+xml">
+  <meta name="theme-color" content="#0b0d12">
+  <style>
+    /* Instant Share specific styles */
+    .instant-share-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 0 2rem;
+    }
+    .instant-share-header h1 {
+      font-size: clamp(2rem, 2.5vw + 1rem, 2.8rem);
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--brand), var(--accent), var(--brand-2)); 
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      color: transparent;
+    }
+    .instant-share-header p {
+      color: var(--muted);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color: #0b0d12;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(124,92,255,0.35);
+      transition: transform .15s ease, box-shadow .25s ease;
+      z-index: 1000;
+    }
+    .back-link:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 14px 30px rgba(124,92,255,0.45);
+    }
+    .instant-share-grid {
+      display: grid;
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .connection-card, .transfer-card, .instructions-card {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .control-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .control-row input {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg-elev);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+    .control-row input:focus {
+      outline: none;
+      border-color: rgba(124,92,255,0.45);
+      box-shadow: 0 0 0 3px rgba(124,92,255,0.12);
+    }
+    .status-display {
+      background: var(--bg-elev);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      font-weight: 500;
+      margin: 20px 0;
+      color: var(--muted);
+    }
+    .status-display.connected {
+      border-color: rgba(35,213,171,0.45);
+      background: rgba(35,213,171,0.05);
+      color: var(--brand-2);
+    }
+    .qr-container {
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+      background: var(--bg-elev);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .dropzone {
+      border: 2px dashed rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      background: var(--bg-elev);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: rgba(124,92,255,0.5);
+      background: rgba(124,92,255,0.05);
+    }
+    .dropzone p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    .linklike {
+      color: var(--brand);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .linklike:hover {
+      color: var(--accent);
+    }
+    .progress-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .progress-container {
+      text-align: center;
+    }
+    .progress-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+    progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      border: none;
+      background: var(--bg-elev);
+    }
+    progress::-webkit-progress-bar {
+      background: var(--bg-elev);
+      border-radius: 4px;
+    }
+    progress::-webkit-progress-value {
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      border-radius: 4px;
+    }
+    .downloads {
+      background: var(--bg-elev);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      min-height: 60px;
+    }
+    .downloads:empty::before {
+      content: "Downloaded files will appear here";
+      color: var(--muted);
+      font-style: italic;
+    }
+    .downloads a {
+      display: inline-block;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, var(--brand-2), var(--accent));
+      color: #0b0d12;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      margin: 4px 8px 4px 0;
+      transition: transform 0.15s ease;
+    }
+    .downloads a:hover {
+      transform: translateY(-1px);
+    }
+    .instructions-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .instructions-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--bg-elev);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .step-number {
+      min-width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color: #0b0d12;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .step-content strong {
+      color: var(--text);
+    }
+    .tech-note {
+      background: var(--bg-elev);
+      border: 1px solid rgba(35,213,171,0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .tech-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .control-row {
+        flex-direction: column;
+      }
+      .control-row input {
+        min-width: auto;
+      }
+      .progress-row {
+        grid-template-columns: 1fr;
+      }
+      .back-link {
+        position: static;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="portfolio.html" class="back-link">← Back to Portfolio</a>
+    
+    <main>
+      <div class="instant-share-header">
+        <h1>Instant Share</h1>
+        <p>Real-time peer-to-peer file sharing between devices using WebRTC & QR codes</p>
+      </div>
+
+      <div class="instant-share-grid">
+        <!-- Connection Card -->
+        <div class="connection-card">
+          <div class="card-header">
+            <div class="card-icon">🔗</div>
+            <h2 class="card-title">Connection</h2>
+          </div>
+          
+          <div class="control-row">
+            <input id="room" maxlength="6" placeholder="Room code (e.g., 7F3K9Q)" />
+            <button id="hostBtn" class="btn-cta">Host Room</button>
+            <button id="joinBtn" class="btn">Join Room</button>
+          </div>
+
+          <div class="qr-container" id="qr"></div>
+          <div class="status-display" id="status">Idle</div>
+        </div>
+
+        <!-- File Transfer Card -->
+        <div class="transfer-card">
+          <div class="card-header">
+            <div class="card-icon">📁</div>
+            <h2 class="card-title">File Transfer</h2>
+          </div>
+          
+          <div id="drop" class="dropzone">
+            <p>Drag & drop file here, or <label class="linklike">browse files
+              <input id="file" type="file" hidden />
+            </label></p>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-container">
+              <div class="progress-label">Sending</div>
+              <progress id="sendProg" value="0" max="100"></progress>
+            </div>
+            <div class="progress-container">
+              <div class="progress-label">Receiving</div>
+              <progress id="recvProg" value="0" max="100"></progress>
+            </div>
+          </div>
+
+          <div class="downloads" id="downloads"></div>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="instructions-card">
+          <div class="card-header">
+            <div class="card-icon">📋</div>
+            <h2 class="card-title">How to Use</h2>
+          </div>
+          
+          <ol class="instructions-list">
+            <li>
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Host:</strong> Click "Host Room" to create a new sharing session
+              </div>
+            </li>
+            <li>
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Share:</strong> Send the QR code or room code to your other device
+              </div>
+            </li>
+            <li>
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Join:</strong> On the other device, enter the room code and click "Join Room"
+              </div>
+            </li>
+            <li>
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <strong>Transfer:</strong> Drag files or click "browse files" to share instantly
+              </div>
+            </li>
+          </ol>
+          
+          <div class="tech-note">
+            <p><strong>🔒 Privacy First:</strong> Files transfer directly between your devices using peer-to-peer WebRTC - no server storage, no cloud uploads!</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Ably JS SDK (global Ably object) -->
+  <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+  <!-- Tiny QR generator -->
+  <script src="https://unpkg.com/qrcode/build/qrcode.min.js"></script>
+  <script type="module" src="instant-share-app.js"></script>
+</body>
+</html>
