@@ -57,6 +57,15 @@ function checkSafariCompatibility() {
     console.log("   • Make sure both devices are on same WiFi");
     console.log("   • Try Chrome browser if issues persist");
     console.log("   • Check Safari Settings → Privacy → Prevent Cross-Site Tracking (disable)");
+    
+    // Show Safari-specific guidance
+    if (els.status) {
+      setTimeout(() => {
+        if (els.status.textContent.includes('Safari detected')) {
+          els.status.innerHTML += '<br><small>💡 For better connectivity: Use same WiFi network on both devices</small>';
+        }
+      }, 2000);
+    }
   }
   
   return { isSafari, isIOS, isHTTP };
@@ -73,27 +82,81 @@ function randomRoom() {
 function makeQR(url) {
   els.qr.innerHTML = "";
   
-  // Check if QR library is loaded
-  if (typeof window.QRCode === 'undefined') {
-    console.warn("⚠️ QR Code library not loaded, showing URL instead");
-    els.qr.innerHTML = `<p><strong>Join URL:</strong><br><a href="${url}" target="_blank">${url}</a></p>`;
-    return;
-  }
+  // Always show the URL first for immediate access
+  const urlDiv = document.createElement('div');
+  urlDiv.innerHTML = `
+    <p style="margin-bottom: 16px; color: var(--muted); font-size: 0.9rem;">
+      <strong>Room Code:</strong> ${els.room.value}
+    </p>
+    <p style="margin-bottom: 16px; font-size: 0.85rem;">
+      <strong>Share this URL:</strong><br>
+      <a href="${url}" target="_blank" style="color: var(--brand); word-break: break-all;">${url}</a>
+    </p>
+  `;
+  els.qr.appendChild(urlDiv);
   
-  try {
-    window.QRCode.toCanvas(url, { width: 180 }, (err, cvs) => {
-      if (!err && cvs) {
-        els.qr.appendChild(cvs);
-        console.log("✅ QR code generated successfully");
-      } else {
-        console.error("❌ QR code generation failed:", err);
-        els.qr.innerHTML = `<p><strong>Join URL:</strong><br><a href="${url}" target="_blank">${url}</a></p>`;
+  // Try to generate QR code
+  console.log("🔄 Attempting to generate QR code...");
+  console.log("QRCode available:", typeof window.QRCode !== 'undefined');
+  
+  // Wait a moment for QR library to load if needed
+  setTimeout(() => {
+    if (typeof window.QRCode !== 'undefined') {
+      try {
+        console.log("📱 Generating QR code for:", url);
+        
+        const qrContainer = document.createElement('div');
+        qrContainer.style.textAlign = 'center';
+        qrContainer.style.marginTop = '16px';
+        
+        const qrTitle = document.createElement('p');
+        qrTitle.textContent = 'Scan with your phone:';
+        qrTitle.style.margin = '0 0 12px 0';
+        qrTitle.style.fontSize = '0.9rem';
+        qrTitle.style.color = 'var(--muted)';
+        qrContainer.appendChild(qrTitle);
+        
+        window.QRCode.toCanvas(url, { 
+          width: 200, 
+          margin: 2,
+          color: {
+            dark: '#e5e7eb',
+            light: '#0b0d12'
+          }
+        }, (err, canvas) => {
+          if (!err && canvas) {
+            canvas.style.borderRadius = '12px';
+            canvas.style.background = '#e5e7eb';
+            canvas.style.padding = '8px';
+            qrContainer.appendChild(canvas);
+            console.log("✅ QR code generated successfully");
+          } else {
+            console.error("❌ QR canvas generation failed:", err);
+            qrContainer.innerHTML = '<p style="color: var(--muted); font-style: italic;">QR code generation failed</p>';
+          }
+        });
+        
+        els.qr.appendChild(qrContainer);
+        
+      } catch (error) {
+        console.error("❌ QR code generation error:", error);
+        const errorDiv = document.createElement('p');
+        errorDiv.textContent = 'QR code generation failed - use the URL above';
+        errorDiv.style.color = 'var(--muted)';
+        errorDiv.style.fontStyle = 'italic';
+        errorDiv.style.marginTop = '16px';
+        els.qr.appendChild(errorDiv);
       }
-    });
-  } catch (error) {
-    console.error("❌ QR code error:", error);
-    els.qr.innerHTML = `<p><strong>Join URL:</strong><br><a href="${url}" target="_blank">${url}</a></p>`;
-  }
+    } else {
+      console.warn("⚠️ QR Code library not available");
+      const fallbackDiv = document.createElement('p');
+      fallbackDiv.textContent = 'QR library not loaded - use the URL above';
+      fallbackDiv.style.color = 'var(--muted)';
+      fallbackDiv.style.fontStyle = 'italic';
+      fallbackDiv.style.marginTop = '16px';
+      els.qr.appendChild(fallbackDiv);
+    }
+  }, 500); // Give QR library time to load
 }
 
 // ---------- ABLY (signaling) ----------
@@ -166,13 +229,16 @@ async function sendSignal(payload) {
 async function createPeer() {
   console.log("🔧 Creating WebRTC peer connection...");
   pc = new RTCPeerConnection(rtcConfig);
+  pc.pendingIceCandidates = []; // Store ICE candidates before remote description
 
   pc.onicecandidate = e => {
     if (e.candidate) {
-      console.log("🧊 Sending ICE candidate");
-      sendSignal({ type: "ice", candidate: e.candidate });
+      console.log("🧊 Sending ICE candidate:", e.candidate.type);
+      sendSignal({ type: "ice", candidate: e.candidate }).catch(error => {
+        console.error("❌ Failed to send ICE candidate:", error);
+      });
     } else {
-      console.log("🧊 All ICE candidates sent");
+      console.log("🧊 All ICE candidates sent (null candidate received)");
     }
   };
 
@@ -292,15 +358,25 @@ async function makeOffer() {
     await sendSignal({ type: "offer", sdp: offer.sdp });
     
     console.log("✅ Offer sent successfully");
-    log("Waiting for someone to join...");
+    log("⏳ Waiting for someone to join using the room code or QR code...");
     
     // Set a timeout for the connection
     setTimeout(() => {
       if (pc.connectionState !== 'connected') {
-        console.warn("⚠️ No connection after 30 seconds");
-        log("No one joined yet. Share the room code or QR code.");
+        console.warn("⚠️ No connection after 60 seconds");
+        log("⏰ Still waiting for connection. Make sure the other device is online and has joined the room.");
       }
-    }, 30000);
+    }, 60000); // Increased to 60 seconds
+    
+    // Also check periodically
+    const checkInterval = setInterval(() => {
+      if (pc.connectionState === 'connected') {
+        clearInterval(checkInterval);
+      } else if (pc.connectionState === 'failed') {
+        clearInterval(checkInterval);
+        log("❌ Connection failed. Try creating a new room.", false);
+      }
+    }, 5000);
     
   } catch (error) {
     console.error("❌ Error making offer:", error);
@@ -310,18 +386,82 @@ async function makeOffer() {
 }
 
 async function handleOffer(sdp) {
-  await pc.setRemoteDescription({ type: "offer", sdp });
-  const answer = await pc.createAnswer();
-  await pc.setLocalDescription(answer);
-  await sendSignal({ type: "answer", sdp: answer.sdp });
+  try {
+    console.log("📞 Setting remote description from offer...");
+    await pc.setRemoteDescription({ type: "offer", sdp });
+    
+    // Process any pending ICE candidates
+    if (pc.pendingIceCandidates && pc.pendingIceCandidates.length > 0) {
+      console.log(`🧊 Processing ${pc.pendingIceCandidates.length} pending ICE candidates`);
+      for (const candidate of pc.pendingIceCandidates) {
+        try {
+          await pc.addIceCandidate(candidate);
+        } catch (error) {
+          console.error("❌ Error adding pending ICE candidate:", error);
+        }
+      }
+      pc.pendingIceCandidates = [];
+    }
+    
+    console.log("📝 Creating answer...");
+    const answer = await pc.createAnswer();
+    
+    console.log("📝 Setting local description...");
+    await pc.setLocalDescription(answer);
+    
+    console.log("📤 Sending answer...");
+    await sendSignal({ type: "answer", sdp: answer.sdp });
+    
+    log("📞 Answer sent, establishing connection...", false);
+    console.log("✅ Answer process completed");
+  } catch (error) {
+    console.error("❌ Error handling offer:", error);
+    log("❌ Failed to process connection offer: " + error.message, false);
+    throw error;
+  }
 }
 
 async function handleAnswer(sdp) {
-  await pc.setRemoteDescription({ type: "answer", sdp });
+  try {
+    console.log("📞 Setting remote description from answer...");
+    await pc.setRemoteDescription({ type: "answer", sdp });
+    
+    // Process any pending ICE candidates
+    if (pc.pendingIceCandidates && pc.pendingIceCandidates.length > 0) {
+      console.log(`🧊 Processing ${pc.pendingIceCandidates.length} pending ICE candidates`);
+      for (const candidate of pc.pendingIceCandidates) {
+        try {
+          await pc.addIceCandidate(candidate);
+        } catch (error) {
+          console.error("❌ Error adding pending ICE candidate:", error);
+        }
+      }
+      pc.pendingIceCandidates = [];
+    }
+    
+    log("🔄 Connection established, finalizing...", false);
+    console.log("✅ Answer processed successfully");
+  } catch (error) {
+    console.error("❌ Error handling answer:", error);
+    log("❌ Failed to process connection answer: " + error.message, false);
+    throw error;
+  }
 }
 
 async function handleIce(candidate) {
-  try { await pc.addIceCandidate(candidate); } catch {}
+  try {
+    if (pc.remoteDescription) {
+      await pc.addIceCandidate(candidate);
+      console.log("🧊 ICE candidate added successfully");
+    } else {
+      console.log("⏳ Queuing ICE candidate (no remote description yet)");
+      // Store ICE candidates if remote description isn't set yet
+      if (!pc.pendingIceCandidates) pc.pendingIceCandidates = [];
+      pc.pendingIceCandidates.push(candidate);
+    }
+  } catch (error) {
+    console.error("❌ Error adding ICE candidate:", error);
+  }
 }
 
 // ---------- UI wiring ----------
@@ -365,15 +505,45 @@ els.hostBtn.addEventListener("click", async () => {
 
 els.joinBtn.addEventListener("click", async () => {
   const code = els.room.value.trim().toUpperCase();
-  if (!code) return alert("Enter a room code");
+  if (!code) {
+    alert("Please enter a room code");
+    return;
+  }
 
-  await createPeer();
-  await openChannel(code, async (msg) => {
-    if (msg.type === "offer") await handleOffer(msg.sdp);
-    if (msg.type === "ice") await handleIce(msg.candidate);
-  });
+  try {
+    log("🔄 Joining room " + code + "...");
+    
+    await createPeer();
+    await openChannel(code, async (msg) => {
+      console.log("📨 Received message type:", msg.type);
+      try {
+        if (msg.type === "offer") {
+          console.log("📞 Processing offer...");
+          await handleOffer(msg.sdp);
+        }
+        if (msg.type === "ice") {
+          console.log("🧊 Processing ICE candidate...");
+          await handleIce(msg.candidate);
+        }
+      } catch (error) {
+        console.error("❌ Error processing message:", error);
+        log("❌ Connection error: " + error.message, false);
+      }
+    });
 
-  log("🔄 Joined room. Connecting to host device...");
+    log("🔄 Joined room. Waiting for host to connect...");
+    
+    // Set a timeout for connection
+    setTimeout(() => {
+      if (!pc || pc.connectionState !== 'connected') {
+        log("⏰ Connection timeout. Make sure the host is online and try again.", false);
+      }
+    }, 30000); // 30 second timeout
+    
+  } catch (error) {
+    console.error("❌ Join error:", error);
+    log("❌ Failed to join room: " + error.message, false);
+  }
 });
 
 // Auto-join via URL ?room=XXXXXX
