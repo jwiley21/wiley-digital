@@ -6,14 +6,35 @@ const ABLY_API_KEY = "dtzUTA.S_fa1A:mjXt7bYFpcdHWm7moXmAM0QnLwItwUewRqSJ97nbmjA"
 const ABLY_AUTH_URL = "/api/ably-token"; // if you implement token endpoint
 const CHANNEL_PREFIX = "rtc:"; // match your Ably namespace restriction if set
 
-// Enhanced RTC config for Safari compatibility
+// Enhanced RTC config with TURN servers for better NAT traversal
 const rtcConfig = {
   iceServers: [
+    // STUN servers for basic NAT traversal
     { urls: "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
-    { urls: "stun:stun2.l.google.com:19302" }
+    { urls: "stun:stun2.l.google.com:19302" },
+    { urls: "stun:stun.services.mozilla.com" },
+    
+    // Free TURN servers for difficult network situations
+    {
+      urls: "turn:openrelay.metered.ca:80",
+      username: "openrelayproject",
+      credential: "openrelayproject"
+    },
+    {
+      urls: "turn:openrelay.metered.ca:443",
+      username: "openrelayproject", 
+      credential: "openrelayproject"
+    },
+    // Backup TURN server
+    {
+      urls: "turn:turn.bistri.com:80",
+      username: "homeo",
+      credential: "homeo"
+    }
   ],
-  iceCandidatePoolSize: 10 // Helps with Safari connection issues
+  iceCandidatePoolSize: 10,
+  iceTransportPolicy: 'all' // Use both STUN and TURN
 };
 
 const els = {
@@ -32,6 +53,9 @@ const els = {
 let pc, dataChannel, ably, channel;
 const CHUNK_SIZE = 64 * 1024; // 64KB chunks works well across browsers
 let isHost = false;
+let connectionTimeout = null;
+let retryAttempts = 0;
+const MAX_RETRY_ATTEMPTS = 3;
 
 function log(s, isConnected = false) { 
   els.status.textContent = s; 
@@ -42,6 +66,42 @@ function log(s, isConnected = false) {
     els.status.classList.add('connected');
   } else {
     els.status.classList.remove('connected');
+  }
+}
+
+// Retry connection logic
+function retryConnection() {
+  if (retryAttempts < MAX_RETRY_ATTEMPTS) {
+    retryAttempts++;
+    log(`🔄 Connection failed. Retrying... (${retryAttempts}/${MAX_RETRY_ATTEMPTS})`, false);
+    setTimeout(() => {
+      if (pc) {
+        pc.close();
+      }
+      createPeer().then(() => {
+        if (isHost) {
+          makeOffer();
+        }
+      }).catch(error => {
+        console.error("Retry failed:", error);
+        if (retryAttempts >= MAX_RETRY_ATTEMPTS) {
+          log("❌ Connection failed after multiple attempts. Please refresh and try again.", false);
+        } else {
+          retryConnection();
+        }
+      });
+    }, 2000 * retryAttempts); // Exponential backoff
+  } else {
+    log("❌ Connection failed after multiple attempts. Please refresh and try again.", false);
+  }
+}
+
+// Reset retry counter on successful connection
+function resetRetryCounter() {
+  retryAttempts = 0;
+  if (connectionTimeout) {
+    clearTimeout(connectionTimeout);
+    connectionTimeout = null;
   }
 }
 
@@ -95,7 +155,7 @@ function makeQR(url) {
   `;
   els.qr.appendChild(urlDiv);
   
-  // Try to generate QR code
+  // Try to generate QR code with multiple attempts
   console.log("🔄 Attempting to generate QR code...");
   console.log("QRCode available:", typeof window.QRCode !== 'undefined');
   
@@ -132,7 +192,9 @@ function makeQR(url) {
             console.log("✅ QR code generated successfully");
           } else {
             console.error("❌ QR canvas generation failed:", err);
-            qrContainer.innerHTML = '<p style="color: var(--muted); font-style: italic;">QR code generation failed</p>';
+            if (qrContainer.parentNode) {
+              qrContainer.innerHTML = '<p style="color: var(--muted); font-style: italic;">QR code generation failed</p>';
+            }
           }
         });
         
@@ -148,13 +210,29 @@ function makeQR(url) {
         els.qr.appendChild(errorDiv);
       }
     } else {
-      console.warn("⚠️ QR Code library not available");
-      const fallbackDiv = document.createElement('p');
-      fallbackDiv.textContent = 'QR library not loaded - use the URL above';
-      fallbackDiv.style.color = 'var(--muted)';
-      fallbackDiv.style.fontStyle = 'italic';
-      fallbackDiv.style.marginTop = '16px';
-      els.qr.appendChild(fallbackDiv);
+      console.warn("⚠️ QR Code library not available, trying to load...");
+      
+      // Try to load QR library dynamically
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/qrcode/build/qrcode.min.js';
+      script.onload = () => {
+        console.log("📚 QR library loaded, retrying...");
+        setTimeout(() => {
+          if (typeof window.QRCode !== 'undefined') {
+            makeQR(url); // Retry QR generation
+          }
+        }, 100);
+      };
+      script.onerror = () => {
+        console.error("❌ Failed to load QR library");
+        const fallbackDiv = document.createElement('p');
+        fallbackDiv.textContent = 'QR library failed to load - use the URL above';
+        fallbackDiv.style.color = 'var(--muted)';
+        fallbackDiv.style.fontStyle = 'italic';
+        fallbackDiv.style.marginTop = '16px';
+        els.qr.appendChild(fallbackDiv);
+      };
+      document.head.appendChild(script);
     }
   }, 500); // Give QR library time to load
 }
@@ -252,15 +330,23 @@ async function createPeer() {
     console.log("🔄 Connection state:", pc.connectionState);
     if (pc.connectionState === 'connected') {
       log("✅ Connected! You can now share files between devices.", true);
-      // Enable drag and drop visual feedback
+      resetRetryCounter();
       els.drop.style.cursor = 'pointer';
     } else if (pc.connectionState === 'failed') {
-      log("❌ Connection failed. Try refreshing both devices.", false);
+      log("❌ Connection failed. Attempting to reconnect...", false);
+      retryConnection();
     } else if (pc.connectionState === 'disconnected') {
       log("🔌 Disconnected. Create a new room to reconnect.", false);
       els.drop.style.cursor = 'not-allowed';
     } else if (pc.connectionState === 'connecting') {
       log("🔄 Connecting to other device...", false);
+      // Set a timeout for this connection attempt
+      connectionTimeout = setTimeout(() => {
+        if (pc.connectionState !== 'connected') {
+          log("⏰ Connection timeout. Trying different approach...", false);
+          retryConnection();
+        }
+      }, 15000); // 15 second timeout per attempt
     }
   };
 
@@ -270,6 +356,19 @@ async function createPeer() {
 
   pc.oniceconnectionstatechange = () => {
     console.log("🧊 ICE connection state:", pc.iceConnectionState);
+    
+    // Add diagnostic information
+    if (pc.iceConnectionState === 'failed') {
+      console.error("🚨 ICE connection failed - this usually means NAT traversal issues");
+      console.log("💡 Troubleshooting tips:");
+      console.log("   • Ensure both devices are on stable internet");
+      console.log("   • Try using same WiFi network");
+      console.log("   • Check if corporate firewall is blocking WebRTC");
+    } else if (pc.iceConnectionState === 'checking') {
+      console.log("🔍 ICE candidates being tested...");
+    } else if (pc.iceConnectionState === 'connected') {
+      console.log("✅ ICE connection established!");
+    }
   };
 
   console.log("✅ Peer connection created");
