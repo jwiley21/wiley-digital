@@ -366,8 +366,9 @@
 
   <!-- Ably JS SDK (global Ably object) -->
   <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-  <!-- Tiny QR generator -->
+  <!-- QR Code generator -->
   <script src="https://unpkg.com/qrcode/build/qrcode.min.js"></script>
-  <script type="module" src="instant-share-app.js"></script>
+  <!-- Instant Share App - load after dependencies -->
+  <script defer src="instant-share-app.js"></script>
 </body>
 </html>

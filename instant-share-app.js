@@ -140,6 +140,7 @@ function randomRoom() {
 }
 
 function makeQR(url) {
+  console.log("🔄 makeQR called with URL:", url);
   els.qr.innerHTML = "";
   
   // Always show the URL first for immediate access
@@ -155,86 +156,125 @@ function makeQR(url) {
   `;
   els.qr.appendChild(urlDiv);
   
-  // Try to generate QR code with multiple attempts
-  console.log("🔄 Attempting to generate QR code...");
+  // Generate QR code immediately if library is available
+  generateQRCode(url);
+  
+  // Add debug panel
+  addDebugInfo(url);
+}
+
+function addDebugInfo(url) {
+  // Add a debug section for troubleshooting
+  const debugDiv = document.createElement('div');
+  debugDiv.style.marginTop = '20px';
+  debugDiv.style.padding = '12px';
+  debugDiv.style.background = 'rgba(255,255,255,0.05)';
+  debugDiv.style.borderRadius = '8px';
+  debugDiv.style.fontSize = '0.8rem';
+  debugDiv.style.color = 'var(--muted)';
+  
+  debugDiv.innerHTML = `
+    <details>
+      <summary style="cursor: pointer; font-weight: 600; margin-bottom: 8px;">🔧 Debug Info (click to expand)</summary>
+      <div style="line-height: 1.4;">
+        <p><strong>Browser:</strong> ${navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') ? 'Safari' : navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Other'}</p>
+        <p><strong>Platform:</strong> ${navigator.platform}</p>
+        <p><strong>WebRTC Support:</strong> ${window.RTCPeerConnection ? '✅ Yes' : '❌ No'}</p>
+        <p><strong>QR Library:</strong> ${typeof window.QRCode !== 'undefined' ? '✅ Loaded' : '❌ Not loaded'}</p>
+        <p><strong>Ably Support:</strong> ${typeof window.Ably !== 'undefined' ? '✅ Loaded' : '❌ Not loaded'}</p>
+        <p><strong>Room URL:</strong> <span style="word-break: break-all;">${url}</span></p>
+        <p style="margin-top: 8px; font-size: 0.75rem;"><em>If connection fails, try using the same WiFi network on both devices.</em></p>
+      </div>
+    </details>
+  `;
+  
+  els.qr.appendChild(debugDiv);
+}
+
+function generateQRCode(url, attempt = 1) {
+  const maxAttempts = 5;
+  console.log(`🔄 QR generation attempt ${attempt}/${maxAttempts}`);
   console.log("QRCode available:", typeof window.QRCode !== 'undefined');
   
-  // Wait a moment for QR library to load if needed
-  setTimeout(() => {
-    if (typeof window.QRCode !== 'undefined') {
-      try {
-        console.log("📱 Generating QR code for:", url);
-        
-        const qrContainer = document.createElement('div');
-        qrContainer.style.textAlign = 'center';
-        qrContainer.style.marginTop = '16px';
-        
-        const qrTitle = document.createElement('p');
-        qrTitle.textContent = 'Scan with your phone:';
-        qrTitle.style.margin = '0 0 12px 0';
-        qrTitle.style.fontSize = '0.9rem';
-        qrTitle.style.color = 'var(--muted)';
-        qrContainer.appendChild(qrTitle);
-        
-        window.QRCode.toCanvas(url, { 
-          width: 200, 
-          margin: 2,
-          color: {
-            dark: '#e5e7eb',
-            light: '#0b0d12'
-          }
-        }, (err, canvas) => {
-          if (!err && canvas) {
-            canvas.style.borderRadius = '12px';
-            canvas.style.background = '#e5e7eb';
-            canvas.style.padding = '8px';
-            qrContainer.appendChild(canvas);
-            console.log("✅ QR code generated successfully");
-          } else {
-            console.error("❌ QR canvas generation failed:", err);
-            if (qrContainer.parentNode) {
-              qrContainer.innerHTML = '<p style="color: var(--muted); font-style: italic;">QR code generation failed</p>';
-            }
-          }
-        });
-        
-        els.qr.appendChild(qrContainer);
-        
-      } catch (error) {
-        console.error("❌ QR code generation error:", error);
-        const errorDiv = document.createElement('p');
-        errorDiv.textContent = 'QR code generation failed - use the URL above';
-        errorDiv.style.color = 'var(--muted)';
-        errorDiv.style.fontStyle = 'italic';
-        errorDiv.style.marginTop = '16px';
-        els.qr.appendChild(errorDiv);
-      }
-    } else {
-      console.warn("⚠️ QR Code library not available, trying to load...");
+  if (typeof window.QRCode !== 'undefined') {
+    try {
+      console.log("📱 Generating QR code for:", url);
       
-      // Try to load QR library dynamically
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/qrcode/build/qrcode.min.js';
-      script.onload = () => {
-        console.log("📚 QR library loaded, retrying...");
-        setTimeout(() => {
-          if (typeof window.QRCode !== 'undefined') {
-            makeQR(url); // Retry QR generation
-          }
-        }, 100);
-      };
-      script.onerror = () => {
-        console.error("❌ Failed to load QR library");
-        const fallbackDiv = document.createElement('p');
-        fallbackDiv.textContent = 'QR library failed to load - use the URL above';
-        fallbackDiv.style.color = 'var(--muted)';
-        fallbackDiv.style.fontStyle = 'italic';
-        fallbackDiv.style.marginTop = '16px';
-        els.qr.appendChild(fallbackDiv);
-      };
-      document.head.appendChild(script);
+      const qrContainer = document.createElement('div');
+      qrContainer.style.textAlign = 'center';
+      qrContainer.style.marginTop = '16px';
+      qrContainer.id = 'qr-container';
+      
+      const qrTitle = document.createElement('p');
+      qrTitle.textContent = 'Scan with your phone:';
+      qrTitle.style.margin = '0 0 12px 0';
+      qrTitle.style.fontSize = '0.9rem';
+      qrTitle.style.color = 'var(--muted)';
+      qrContainer.appendChild(qrTitle);
+      
+      // Create a loading message
+      const loadingMsg = document.createElement('p');
+      loadingMsg.textContent = 'Generating QR code...';
+      loadingMsg.style.color = 'var(--muted)';
+      loadingMsg.style.fontStyle = 'italic';
+      qrContainer.appendChild(loadingMsg);
+      
+      els.qr.appendChild(qrContainer);
+      
+      // Generate QR code
+      window.QRCode.toCanvas(url, { 
+        width: 200, 
+        margin: 2,
+        color: {
+          dark: '#e5e7eb',
+          light: '#0b0d12'
+        }
+      }, (err, canvas) => {
+        // Remove loading message
+        if (loadingMsg.parentNode) {
+          loadingMsg.remove();
+        }
+        
+        if (!err && canvas) {
+          canvas.style.borderRadius = '12px';
+          canvas.style.background = '#e5e7eb';
+          canvas.style.padding = '8px';
+          canvas.style.display = 'block';
+          canvas.style.margin = '0 auto';
+          qrContainer.appendChild(canvas);
+          console.log("✅ QR code generated successfully");
+        } else {
+          console.error("❌ QR canvas generation failed:", err);
+          const errorMsg = document.createElement('p');
+          errorMsg.textContent = 'QR code generation failed - use the URL above';
+          errorMsg.style.color = 'var(--muted)';
+          errorMsg.style.fontStyle = 'italic';
+          qrContainer.appendChild(errorMsg);
+        }
+      });
+      
+    } catch (error) {
+      console.error("❌ QR code generation error:", error);
+      const errorDiv = document.createElement('p');
+      errorDiv.textContent = 'QR code generation failed - use the URL above';
+      errorDiv.style.color = 'var(--muted)';
+      errorDiv.style.fontStyle = 'italic';
+      errorDiv.style.marginTop = '16px';
+      els.qr.appendChild(errorDiv);
     }
-  }, 500); // Give QR library time to load
+  } else if (attempt < maxAttempts) {
+    console.warn(`⚠️ QR Code library not ready, retry ${attempt + 1}/${maxAttempts} in ${attempt * 200}ms`);
+    setTimeout(() => generateQRCode(url, attempt + 1), attempt * 200);
+  } else {
+    console.error("❌ QR Code library failed to load after multiple attempts");
+    const fallbackDiv = document.createElement('p');
+    fallbackDiv.innerHTML = `
+      <p style="color: var(--muted); font-style: italic; margin-top: 16px;">
+        QR code unavailable - copy the URL above to share
+      </p>
+    `;
+    els.qr.appendChild(fallbackDiv);
+  }
 }
 
 // ---------- ABLY (signaling) ----------
@@ -568,6 +608,7 @@ els.hostBtn.addEventListener("click", async () => {
   console.log("🎯 Host button clicked!");
   
   try {
+    resetRetryCounter();
     let code = els.room.value.trim().toUpperCase() || randomRoom();
     els.room.value = code;
     console.log("📝 Room code:", code);
@@ -577,28 +618,43 @@ els.hostBtn.addEventListener("click", async () => {
     els.qr.innerHTML = "";
     console.log("🔗 Room URL:", url.toString());
     
-    log("Creating QR code...");
+    log("📱 Creating QR code and room...");
     makeQR(url.toString());
 
-    log("Creating peer connection...");
+    log("🔧 Setting up peer connection...");
     await createPeer();
     
-    log("Opening Ably channel...");
+    log("📡 Opening signaling channel...");
     await openChannel(code, async (msg) => {
-      console.log("📨 Received signal:", msg);
-      if (msg.type === "answer") await handleAnswer(msg.sdp);
-      if (msg.type === "ice") await handleIce(msg.candidate);
+      console.log("📨 Host received signal:", msg.type);
+      try {
+        if (msg.type === "ping") {
+          console.log("👋 Joiner pinged - sending offer...");
+          log("👋 Someone joined! Starting connection...");
+          await makeOffer();
+        }
+        if (msg.type === "answer") {
+          console.log("✅ Processing answer from joiner...");
+          await handleAnswer(msg.sdp);
+        }
+        if (msg.type === "ice") {
+          console.log("🧊 Processing ICE candidate from joiner...");
+          await handleIce(msg.candidate);
+        }
+      } catch (error) {
+        console.error("❌ Error handling signal:", error);
+      }
     });
 
     isHost = true;
-    log("🏠 Room created! Share the QR code or room code with your other device.");
+    log("🏠 Room ready! Share the QR code or room code with your other device.");
+    log("⏳ Waiting for someone to join...");
     
-    log("Making WebRTC offer...");
-    await makeOffer();
-    console.log("✅ Host setup complete!");
+    console.log("✅ Host setup complete - waiting for joiner to ping")
+    
   } catch (error) {
     console.error("❌ Host button error:", error);
-    log("Error: " + error.message);
+    log("❌ Host setup error: " + error.message);
   }
 });
 
@@ -610,18 +666,21 @@ els.joinBtn.addEventListener("click", async () => {
   }
 
   try {
+    resetRetryCounter();
     log("🔄 Joining room " + code + "...");
+    console.log("🎯 Join button clicked for room:", code);
     
     await createPeer();
     await openChannel(code, async (msg) => {
       console.log("📨 Received message type:", msg.type);
       try {
         if (msg.type === "offer") {
-          console.log("📞 Processing offer...");
+          console.log("📞 Processing offer from host...");
           await handleOffer(msg.sdp);
+          log("✅ Received offer from host. Sending answer back...");
         }
         if (msg.type === "ice") {
-          console.log("🧊 Processing ICE candidate...");
+          console.log("🧊 Processing ICE candidate from host...");
           await handleIce(msg.candidate);
         }
       } catch (error) {
@@ -630,14 +689,33 @@ els.joinBtn.addEventListener("click", async () => {
       }
     });
 
-    log("🔄 Joined room. Waiting for host to connect...");
+    // Send ping to notify host that joiner is ready
+    log("👋 Notifying host that you've joined...");
+    await sendSignal({ type: "ping" });
+
+    isHost = false;
+    log("🔄 Joined room successfully. Waiting for host connection...");
     
-    // Set a timeout for connection
-    setTimeout(() => {
+    // Improved timeout with better messaging
+    const joinTimeout = setTimeout(() => {
       if (!pc || pc.connectionState !== 'connected') {
-        log("⏰ Connection timeout. Make sure the host is online and try again.", false);
+        log("⏰ No connection established yet. This could mean:", false);
+        log("   • Host hasn't started sharing yet", false);
+        log("   • Network/firewall blocking connection", false);
+        log("   • Try refreshing and joining again", false);
       }
-    }, 30000); // 30 second timeout
+    }, 20000); // 20 second initial timeout
+    
+    // Clear timeout if connection succeeds
+    const originalOnConnectionStateChange = pc.onconnectionstatechange;
+    pc.onconnectionstatechange = (...args) => {
+      if (pc.connectionState === 'connected') {
+        clearTimeout(joinTimeout);
+      }
+      if (originalOnConnectionStateChange) {
+        originalOnConnectionStateChange(...args);
+      }
+    };
     
   } catch (error) {
     console.error("❌ Join error:", error);
