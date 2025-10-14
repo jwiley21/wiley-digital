@@ -28,8 +28,8 @@
         <div class="hero-grid">
           <div>
             <p class="kicker">Services</p>
-            <h1>Marketing & e-commerce websites</h1>
-            <p class="subhead">Fast, SEO-friendly sites with clean information architecture and modern visuals.</p>
+            <h1>Custom websites for small businesses</h1>
+            <p class="subhead">Fast, SEO-friendly sites with clean information architecture and modern visuals, built to scale.</p>
             <div class="btn-row">
               <a class="btn-cta" href="/contact.html">Start a project</a>
               <a class="btn" href="/portfolio.html">View portfolio</a>
@@ -49,6 +49,38 @@
       </div>
     </section>
 
+    <!-- Templates Section -->
+    <section class="templates-section">
+      <div class="templates-bg">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient-1"></div>
+        <div class="bg-gradient-2"></div>
+      </div>
+      <div class="container">
+        <div class="templates-header">
+          <div class="section-header"><span class="rule"></span><span class="label">Templates</span></div>
+          <h2>Choose from ready-made designs</h2>
+          <p class="section-subhead">Start with a proven template and customize it to fit your brand. All templates are mobile-responsive and optimized for performance.</p>
+        </div>
+        
+        <div class="template-filters">
+          <button class="filter-btn active" onclick="filterTemplates('all')">All Templates</button>
+          <button class="filter-btn" onclick="filterTemplates('Business')">Business</button>
+          <button class="filter-btn" onclick="filterTemplates('E-commerce')">E-commerce</button>
+          <button class="filter-btn" onclick="filterTemplates('Portfolio')">Portfolio</button>
+        </div>
+
+        <div class="templates-grid" id="templates-container">
+          <!-- Templates will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="cta-row" style="margin-top: 48px;">
+          <a class="section-cta section-cta--web" href="/contact.html">Customize a template</a>
+          <a class="btn" href="/portfolio.html">See custom work</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section is-contrast">
       <div class="container">
         <div class="section-header"><span class="rule"></span><span class="label">Process</span></div>
@@ -63,6 +95,356 @@
   </main>
   <div data-include="../partials/footer.html"></div>
   <script src="../assets/js/main.js"></script>
+
+  <!-- Templates functionality -->
+  <style>
+    .templates-section {
+      position: relative;
+      padding: 80px 0 100px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0a0c10 0%, #1a1f2e 50%, #0f1419 100%);
+    }
+    
+    .templates-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask: radial-gradient(circle at center, black 0%, transparent 70%);
+    }
+    
+    .bg-gradient-1 {
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 60%;
+      height: 120%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      animation: float-1 8s ease-in-out infinite;
+    }
+    
+    .bg-gradient-2 {
+      position: absolute;
+      bottom: -30%;
+      right: -10%;
+      width: 40%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+      animation: float-2 10s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float-1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(20px, -30px) rotate(2deg); }
+    }
+    
+    @keyframes float-2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-15px, 20px) rotate(-1deg); }
+    }
+    
+    .templates-header {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .templates-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 20px 0;
+      background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .template-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 48px 0;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .filter-btn {
+      padding: 12px 24px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--gray-300);
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .filter-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .filter-btn:hover {
+      border-color: var(--blue-500);
+      color: var(--gray-100);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+    }
+    
+    .filter-btn:hover::before {
+      opacity: 1;
+    }
+    
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
+      border-color: var(--blue-500);
+      color: white;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+    
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .template-card {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+    
+    .template-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .template-card:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.2);
+    }
+    
+    .template-card:hover::before {
+      opacity: 1;
+    }
+    
+    .template-preview {
+      width: 100%;
+      height: 240px;
+      background: linear-gradient(135deg, var(--gray-800) 0%, var(--gray-900) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .template-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    
+    .template-card:hover .template-preview::after {
+      transform: translateX(100%);
+    }
+    
+    .template-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    
+    .template-card:hover .template-preview img {
+      transform: scale(1.05);
+    }
+    
+    .template-preview .placeholder {
+      color: var(--gray-500);
+      font-size: 56px;
+      opacity: 0.7;
+    }
+    
+    .template-info {
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .template-info h3 {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-100);
+    }
+    
+    .template-category {
+      display: inline-block;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .template-info p {
+      color: var(--gray-400);
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0 0 24px 0;
+    }
+    
+    .template-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .template-actions .btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-preview {
+      background: transparent;
+      color: var(--blue-400);
+      border: 1px solid var(--blue-400);
+    }
+    
+    .btn-preview:hover {
+      background: var(--blue-400);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .template-actions .btn-cta {
+      background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
+      border: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+    
+    .template-actions .btn-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .templates-section {
+        padding: 60px 0 80px;
+      }
+      
+      .template-filters {
+        gap: 12px;
+      }
+      
+      .filter-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+      
+      .templates-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+  </style>
+
+  <script>
+    // Load and display templates
+    async function loadTemplates() {
+      try {
+        const response = await fetch('../assets/data/templates.json');
+        const templates = await response.json();
+        displayTemplates(templates);
+      } catch (error) {
+        console.error('Error loading templates:', error);
+        document.getElementById('templates-container').innerHTML = '<p style="text-align: center; color: var(--gray-400);">Unable to load templates at this time.</p>';
+      }
+    }
+
+    function displayTemplates(templates, filter = 'all') {
+      const container = document.getElementById('templates-container');
+      const filteredTemplates = filter === 'all' ? templates : templates.filter(t => t.category === filter);
+      
+      container.innerHTML = filteredTemplates.map(template => `
+        <div class="template-card" data-category="${template.category}">
+          <div class="template-preview">
+            ${template.thumb ? 
+              `<img src="../${template.thumb}" alt="${template.name} preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               <div class="placeholder" style="display: none;">🎨</div>` :
+              `<div class="placeholder">🎨</div>`
+            }
+          </div>
+          <div class="template-info">
+            <span class="template-category">${template.category}</span>
+            <h3>${template.name}</h3>
+            <p>${template.description}</p>
+            <div class="template-actions">
+              <a href="../${template.demo}" class="btn btn-preview" target="_blank">Live Preview</a>
+              <a href="/contact.html?template=${template.id}" class="btn btn-cta">Customize This</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterTemplates(category) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Filter templates
+      fetch('../assets/data/templates.json')
+        .then(response => response.json())
+        .then(templates => displayTemplates(templates, category));
+    }
+
+    // Load templates when page loads
+    document.addEventListener('DOMContentLoaded', loadTemplates);
+  </script>
 
   <script>
   (function() {

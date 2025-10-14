@@ -110,7 +110,7 @@ async function initTemplateShowcase(){
 }
 
 function renderFilters(){
-  const chips = document.querySelectorAll('#template-filters .filter-chip');
+  const chips = document.querySelectorAll('#template-filters .filter-chip, #template-filters .filter-btn-main');
   chips.forEach(chip=>{
     chip.addEventListener('click', ()=>{
       chips.forEach(c=>c.classList.remove('active'));
@@ -129,14 +129,22 @@ function renderTemplates(){
     : tplState.items.filter(t => t.category === tplState.filter);
 
   grid.innerHTML = items.map(t => {
-    const thumb = t.thumb ? `<img src="${t.thumb}" alt="${t.name}" loading="lazy">` : '';
+    const thumb = t.thumb ? 
+      `<img src="${t.thumb}" alt="${t.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+       <div class="template-placeholder" style="display: none;">🎨</div>` :
+      `<div class="template-placeholder">🎨</div>`;
+    
     return `
       <article class="card template-card reveal" data-id="${t.id}">
-        <div class="template-thumb">${thumb}</div>
-        <h3>${t.name}</h3>
-        <p class="muted">${t.description || ''}</p>
-        <div class="btn-row">
-          <a class="btn" href="${t.demo || '#'}" target="_blank" rel="noopener">View live</a>
+        <div class="template-preview">${thumb}</div>
+        <div class="card-content">
+          <span class="template-category">${t.category}</span>  
+          <h3>${t.name}</h3>
+          <p>${t.description || ''}</p>
+          <div class="template-actions">
+            <a class="btn btn-preview" href="${t.demo || '#'}" target="_blank" rel="noopener">Live Preview</a>
+            <a class="btn btn-cta" href="/contact.html?template=${t.id}">Customize This</a>
+          </div>
         </div>
       </article>
     `;

@@ -27,7 +27,7 @@
       <div class="container">
         <div class="section-header"><span class="rule"></span><span class="label">Portfolio</span></div>
         <h2>Selected Work</h2>
-        <p class="muted">Real projects that keep users engaged and help small businesses run smoother. I’ll continue adding more as they launch.</p>
+        <p class="muted">Projects I've been working on. I'll add more as I finish them too.</p>
 
         <div class="cards" style="margin-top:16px;">
           <!-- Ball Knowledge -->
@@ -88,10 +88,115 @@
         </div>
       </div>
     </section>
+
+    <!-- Templates Section -->
+    <section class="templates-section-main">
+      <div class="templates-bg-main">
+        <div class="bg-grid-main"></div>
+        <div class="bg-gradient-1-main"></div>
+        <div class="bg-gradient-2-main"></div>
+      </div>
+      <div class="container">
+        <div class="templates-header-main">
+          <div class="section-header"><span class="rule"></span><span class="label">Templates</span></div>
+          <h2>Ready-Made Designs</h2>
+          <p class="muted">Explore our collection of professionally designed templates that you can customize for your business.</p>
+        </div>
+        
+        <div class="template-filters-main" id="portfolio-template-filters">
+          <button class="filter-btn-main active" data-filter="All">All Templates</button>
+          <button class="filter-btn-main" data-filter="E-commerce">E-commerce</button>
+          <button class="filter-btn-main" data-filter="Portfolio">Portfolio</button>
+          <button class="filter-btn-main" data-filter="Business Intelligence">Business Intelligence</button>
+          <button class="filter-btn-main" data-filter="Business">Business</button>
+        </div>
+
+        <div id="portfolio-templates-grid" class="templates-grid-main">
+          <!-- Templates will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="cta-row" style="margin-top: 48px;">
+          <a class="section-cta section-cta--web" href="services/websites.html">Customize a Template</a>
+          <a class="btn" href="contact.html">Start Custom Project</a>
+        </div>
+      </div>
+    </section>
   </main>
   <div data-include="partials/footer.html"></div>
   <script src="assets/js/main.js"></script>
   <script src="public/chatbot-widget.js" defer></script>
+
+  <!-- Portfolio Templates functionality -->
+  <script>
+    // Portfolio templates state
+    const portfolioTplState = { items: [], filter: 'All' };
+
+    async function initPortfolioTemplates() {
+      try {
+        const response = await fetch('assets/data/templates.json');
+        portfolioTplState.items = await response.json();
+        displayPortfolioTemplates(portfolioTplState.items);
+        setupPortfolioFilters();
+      } catch (error) {
+        console.error('Error loading templates:', error);
+        document.getElementById('portfolio-templates-grid').innerHTML = '<p style="text-align: center; color: var(--muted);">Unable to load templates at this time.</p>';
+      }
+    }
+
+    function displayPortfolioTemplates(templates, filter = 'All') {
+      const container = document.getElementById('portfolio-templates-grid');
+      const filteredTemplates = filter === 'All' ? templates : templates.filter(t => t.category === filter);
+      
+      container.innerHTML = filteredTemplates.map(template => `
+        <article class="card template-card reveal" data-id="${template.id}">
+          <div class="template-preview">
+            ${template.thumb ? 
+              `<img src="${template.thumb}" alt="${template.name} preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               <div class="template-placeholder" style="display: none;">🎨</div>` :
+              `<div class="template-placeholder">🎨</div>`
+            }
+          </div>
+          <div class="card-content">
+            <span class="template-category">${template.category}</span>
+            <h3>${template.name}</h3>
+            <p>${template.description}</p>
+            <div class="template-actions">
+              <a href="${template.demo}" class="btn btn-preview" target="_blank" rel="noopener">Live Preview</a>
+              <a href="contact.html?template=${template.id}" class="btn btn-cta">Customize This</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      // Re-initialize reveal animations for new content
+      if (typeof initReveal === 'function') {
+        initReveal();
+      }
+    }
+
+    function setupPortfolioFilters() {
+      const filterButtons = document.querySelectorAll('#portfolio-template-filters .filter-btn-main');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter templates
+          const category = this.dataset.filter;
+          portfolioTplState.filter = category;
+          displayPortfolioTemplates(portfolioTplState.items, category);
+        });
+      });
+    }
+
+    // Initialize templates when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait a bit for main.js to finish loading
+      setTimeout(initPortfolioTemplates, 100);
+    });
+  </script>
 
 </body>
 </html>

@@ -16,11 +16,11 @@
     "demo": "/templates/portfolio/index.html"
   },
   {
-    "id": "Business - Optimized for ios 26",
-    "name": "Business",
-    "category": "Business", 
-    "description": "Hero, features, prices, and testimonial. Clean and conversion-focused.",
-    "thumb": "templates/business/img/business_temp_img.jpg",
-    "demo": "/templates/business/index.html"
+    "id": "dataviz-pro",
+    "name": "Business Intelligence",
+    "category": "Business Intelligence",
+    "description": "Comprehensive BI dashboard with real-time analytics, data visualization, and performance monitoring.",
+    "thumb": "templates/business-intelligence/img/BI_img.jpg",
+    "demo": "/templates/business-intelligence/index.html"
   }
 ]
