@@ -1,26 +1,26 @@
 [
   {
-    "id": "Business - Optimized for ios 26",
-    "name": "Business",
-    "category": "Business",
-    "description": "Hero, features, prices, and testimonial. Clean and conversion-focused.",
-    "thumb": "templates/business/img/business_temp_img.jpg", 
-    "demo": "/templates/business/index.html"
+    "id": "shop",
+    "name": "E-commerce",
+    "category": "E-commerce",
+    "description": "Complete e-commerce site with products, categories, cart, and user accounts.",
+    "thumb": "templates/e-commerce/img/ecommerce_temp_img.jpg",
+    "demo": "/templates/e-commerce/index.html"
   },
   {
     "id": "folio",
-    "name": "Folio — Portfolio",
-    "category": "Portfolio",
-    "description": "Grid of projects + testimonials + contact.",
-    "thumb": "",
-    "demo": "#"
+    "name": "Portfolio",
+    "category": "Portfolio",  
+    "description": "Beautiful creative portfolio with project showcase, skills, testimonials, and contact form.",
+    "thumb": "templates/portfolio/img/portfolio_temp_img.jpg",
+    "demo": "/templates/portfolio/index.html"
   },
   {
-    "id": "shop",
-    "name": "Shop — E-commerce",
-    "category": "E-commerce",
-    "description": "Product cards, filters, and checkout flow.",
-    "thumb": "",
-    "demo": "#"
+    "id": "Business - Optimized for ios 26",
+    "name": "Business",
+    "category": "Business", 
+    "description": "Hero, features, prices, and testimonial. Clean and conversion-focused.",
+    "thumb": "templates/business/img/business_temp_img.jpg",
+    "demo": "/templates/business/index.html"
   }
 ]

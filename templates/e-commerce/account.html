@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Apex Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-purple-300 transition-colors">Products</a>
+                    <a href="categories.html" class="text-white hover:text-purple-300 transition-colors">Categories</a>
+                    <a href="about.html" class="text-white hover:text-purple-300 transition-colors">About</a>
+                    <a href="contact.html" class="text-white hover:text-purple-300 transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-purple-300 font-medium">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-8 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Welcome back, John!</h1>
+                    <p class="text-xl text-gray-200">Manage your account and track your orders</p>
+                </div>
+                <div class="hidden md:block">
+                    <div class="glass rounded-2xl p-6 text-center">
+                        <div class="w-16 h-16 mx-auto mb-3 gradient-bg rounded-full flex items-center justify-center">
+                            <i data-lucide="user" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <p class="text-white font-medium">Premium Member</p>
+                        <p class="text-gray-300 text-sm">Since 2023</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Account Dashboard -->
+    <section class="py-8 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass rounded-xl p-6 text-center">
+                    <i data-lucide="shopping-bag" class="w-8 h-8 mx-auto mb-3 text-purple-400"></i>
+                    <div class="text-2xl font-bold text-white">24</div>
+                    <div class="text-gray-400 text-sm">Total Orders</div>
+                </div>
+                <div class="glass rounded-xl p-6 text-center">
+                    <i data-lucide="heart" class="w-8 h-8 mx-auto mb-3 text-red-400"></i>
+                    <div class="text-2xl font-bold text-white">12</div>
+                    <div class="text-gray-400 text-sm">Wishlist Items</div>
+                </div>
+                <div class="glass rounded-xl p-6 text-center">
+                    <i data-lucide="star" class="w-8 h-8 mx-auto mb-3 text-yellow-400"></i>
+                    <div class="text-2xl font-bold text-white">150</div>
+                    <div class="text-gray-400 text-sm">Reward Points</div>
+                </div>
+                <div class="glass rounded-xl p-6 text-center">
+                    <i data-lucide="dollar-sign" class="w-8 h-8 mx-auto mb-3 text-green-400"></i>
+                    <div class="text-2xl font-bold text-white">$2,340</div>
+                    <div class="text-gray-400 text-sm">Total Spent</div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap gap-2 mb-8">
+                <button class="tab-button active px-6 py-3 rounded-full border border-gray-600 text-white font-medium transition-colors" 
+                        onclick="switchTab('orders')">Recent Orders</button>
+                <button class="tab-button px-6 py-3 rounded-full border border-gray-600 text-white font-medium transition-colors" 
+                        onclick="switchTab('profile')">Profile</button>
+                <button class="tab-button px-6 py-3 rounded-full border border-gray-600 text-white font-medium transition-colors" 
+                        onclick="switchTab('addresses')">Addresses</button>
+                <button class="tab-button px-6 py-3 rounded-full border border-gray-600 text-white font-medium transition-colors" 
+                        onclick="switchTab('wishlist')">Wishlist</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="orders-tab" class="tab-content">
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Order #12345</h3>
+                                <p class="text-gray-400">Placed on October 10, 2025</p>
+                            </div>
+                            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">Delivered</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="headphones" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Premium Headphones</p>
+                                    <p class="text-gray-400 text-sm">Quantity: 1</p>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-white">$199.00</p>
+                                <p class="text-gray-400 text-sm">Total</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-500 transition-colors">
+                                    View Details
+                                </button>
+                                <button class="flex-1 border border-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                                    Reorder
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Order #12344</h3>
+                                <p class="text-gray-400">Placed on October 5, 2025</p>
+                            </div>
+                            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">Shipped</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="watch" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Smart Watch</p>
+                                    <p class="text-gray-400 text-sm">Quantity: 1</p>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-white">$299.00</p>
+                                <p class="text-gray-400 text-sm">Total</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-500 transition-colors">
+                                    Track Order
+                                </button>
+                                <button class="flex-1 border border-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-tab" class="tab-content hidden">
+                <div class="glass rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-white mb-6">Profile Information</h3>
+                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+                            <input type="text" value="John" class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+                            <input type="text" value="Doe" class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" value="john.doe@example.com" class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                            <input type="tel" value="+1 (555) 123-4567" class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-500 transition-colors">
+                                Update Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="addresses-tab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-white">Home Address</h3>
+                            <span class="bg-purple-600 text-white px-2 py-1 rounded text-xs">Default</span>
+                        </div>
+                        <div class="text-gray-300 mb-4">
+                            <p>123 Main Street</p>
+                            <p>Apartment 4B</p>
+                            <p>New York, NY 10001</p>
+                            <p>United States</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-500 transition-colors">
+                                Edit
+                            </button>
+                            <button class="border border-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6 border-2 border-dashed border-gray-600 flex flex-col items-center justify-center text-center">
+                        <i data-lucide="plus" class="w-12 h-12 text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Add New Address</h3>
+                        <p class="text-gray-400 mb-4">Add a new shipping or billing address</p>
+                        <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-500 transition-colors">
+                            Add Address
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wishlist-tab" class="tab-content hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass rounded-xl overflow-hidden">
+                        <div class="aspect-square bg-gradient-to-br from-pink-500 to-rose-500 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i data-lucide="backpack" class="w-16 h-16 text-white"></i>
+                            </div>
+                            <button class="absolute top-4 right-4 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="x" class="w-4 h-4 text-white"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-white mb-2">Travel Backpack</h3>
+                            <p class="text-2xl font-bold text-white mb-4">$79</p>
+                            <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl overflow-hidden">
+                        <div class="aspect-square bg-gradient-to-br from-orange-500 to-yellow-500 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i data-lucide="coffee" class="w-16 h-16 text-white"></i>
+                            </div>
+                            <button class="absolute top-4 right-4 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="x" class="w-4 h-4 text-white"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-white mb-2">Coffee Maker</h3>
+                            <p class="text-2xl font-bold text-white mb-4">$449</p>
+                            <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Account</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sign Out</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Delete Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function switchTab(tabName) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function toggleCart() {
+            // Cart functionality would be implemented here
+            alert('Cart functionality would be implemented here');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize any necessary components
+        });
+    </script>
+</body>
+</html>

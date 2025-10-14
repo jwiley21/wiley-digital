@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Apex Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation (same as index.html) -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-purple-300 font-medium">Products</a>
+                    <a href="categories.html" class="text-white hover:text-purple-300 transition-colors">Categories</a>
+                    <a href="about.html" class="text-white hover:text-purple-300 transition-colors">About</a>
+                    <a href="contact.html" class="text-white hover:text-purple-300 transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleSearch()">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-8 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Our Products</h1>
+            <p class="text-xl text-gray-200">Discover our complete collection of premium items</p>
+        </div>
+    </section>
+
+    <!-- Filters and Search -->
+    <section class="py-8 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <!-- Search Bar -->
+                <div class="relative flex-1 max-w-md">
+                    <input type="text" id="search-input" placeholder="Search products..." 
+                           class="w-full px-4 py-3 pl-12 bg-gray-800 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <i data-lucide="search" class="absolute left-4 top-3.5 w-5 h-5 text-gray-400"></i>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-gray-600 text-white hover:border-purple-500 transition-colors" 
+                            onclick="filterProducts('all')">All</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-white hover:border-purple-500 transition-colors" 
+                            onclick="filterProducts('electronics')">Electronics</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-white hover:border-purple-500 transition-colors" 
+                            onclick="filterProducts('fashion')">Fashion</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-white hover:border-purple-500 transition-colors" 
+                            onclick="filterProducts('home')">Home & Living</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-white hover:border-purple-500 transition-colors" 
+                            onclick="filterProducts('sports')">Sports</button>
+                </div>
+
+                <!-- Sort Options -->
+                <select id="sort-select" class="px-4 py-3 bg-gray-800 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-8 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Products will be dynamically generated here -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12">
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">← Previous</button>
+                    <button class="px-4 py-2 bg-purple-600 text-white rounded-lg">1</button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">2</button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">3</button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">Next →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter (same as index.html) -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">Stay Updated</h2>
+            <p class="text-xl text-gray-200 mb-8">Get the latest deals and product updates delivered to your inbox</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <button class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home & Living</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar (same as index.html) -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 glass-dark transform translate-x-full transition-transform z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">Shopping Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="border-t border-gray-600 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-white">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-white">$0.00</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
+
+    <script>
+        lucide.createIcons();
+
+        // Sample products data
+        const products = [
+            { id: 1, name: 'Premium Headphones', price: 199, category: 'electronics', rating: 4.8, icon: 'headphones', color: 'from-purple-500 to-blue-500' },
+            { id: 2, name: 'Smart Watch', price: 299, category: 'electronics', rating: 4.7, icon: 'watch', color: 'from-green-500 to-teal-500' },
+            { id: 3, name: 'Travel Backpack', price: 79, category: 'fashion', rating: 4.6, icon: 'backpack', color: 'from-pink-500 to-rose-500' },
+            { id: 4, name: 'Coffee Maker', price: 449, category: 'home', rating: 4.9, icon: 'coffee', color: 'from-orange-500 to-yellow-500' },
+            { id: 5, name: 'Wireless Speaker', price: 129, category: 'electronics', rating: 4.5, icon: 'speaker', color: 'from-blue-500 to-indigo-500' },
+            { id: 6, name: 'Designer Jacket', price: 199, category: 'fashion', rating: 4.4, icon: 'shirt', color: 'from-red-500 to-pink-500' },
+            { id: 7, name: 'Table Lamp', price: 89, category: 'home', rating: 4.3, icon: 'lightbulb', color: 'from-yellow-500 to-orange-500' },
+            { id: 8, name: 'Gaming Mouse', price: 59, category: 'electronics', rating: 4.6, icon: 'mouse-pointer', color: 'from-purple-500 to-violet-500' },
+            { id: 9, name: 'Running Shoes', price: 149, category: 'sports', rating: 4.7, icon: 'zap', color: 'from-green-500 to-blue-500' },
+            { id: 10, name: 'Plant Pot', price: 29, category: 'home', rating: 4.2, icon: 'flower', color: 'from-green-400 to-emerald-500' },
+            { id: 11, name: 'Sunglasses', price: 119, category: 'fashion', rating: 4.4, icon: 'sun', color: 'from-amber-500 to-orange-500' },
+            { id: 12, name: 'Fitness Tracker', price: 99, category: 'sports', rating: 4.5, icon: 'activity', color: 'from-red-500 to-orange-500' }
+        ];
+
+        let currentProducts = [...products];
+        let cart = [];
+
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card glass rounded-2xl overflow-hidden';
+                productCard.innerHTML = `
+                    <div class="aspect-square bg-gradient-to-br ${product.color} relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="${product.icon}" class="w-16 h-16 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="flex items-center bg-black bg-opacity-50 rounded-full px-2 py-1">
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <span class="text-white text-sm ml-1">${product.rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-4 capitalize">${product.category}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-white">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(productCard);
+            });
+
+            lucide.createIcons();
+        }
+
+        function filterProducts(category) {
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter products
+            if (category === 'all') {
+                currentProducts = [...products];
+            } else {
+                currentProducts = products.filter(product => product.category === category);
+            }
+
+            renderProducts(currentProducts);
+        }
+
+        function sortProducts() {
+            const sortValue = document.getElementById('sort-select').value;
+            
+            switch(sortValue) {
+                case 'name':
+                    currentProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'price-low':
+                    currentProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    currentProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    currentProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+            }
+
+            renderProducts(currentProducts);
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            renderProducts(filteredProducts);
+        }
+
+        // Shopping cart functions (same as index.html)
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+
+            cartCount.textContent = cart.length;
+            const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotalElement.textContent = `$${cartTotal.toFixed(2)}`;
+
+            cartItems.innerHTML = '';
+            cart.forEach((item, index) => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex justify-between items-center p-3 glass rounded-lg';
+                cartItem.innerHTML = `
+                    <div>
+                        <h4 class="text-white font-medium">${item.name}</h4>
+                        <p class="text-gray-400">$${item.price}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+
+            lucide.createIcons();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleSearch() {
+            document.getElementById('search-input').focus();
+        }
+
+        // Event listeners
+        document.getElementById('sort-select').addEventListener('change', sortProducts);
+        document.getElementById('search-input').addEventListener('input', searchProducts);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>

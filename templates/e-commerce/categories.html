@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Apex Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-purple-300 transition-colors">Products</a>
+                    <a href="categories.html" class="text-purple-300 font-medium">Categories</a>
+                    <a href="about.html" class="text-white hover:text-purple-300 transition-colors">About</a>
+                    <a href="contact.html" class="text-white hover:text-purple-300 transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-8 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Shop by Category</h1>
+            <p class="text-xl text-gray-200">Find exactly what you're looking for</p>
+        </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Electronics Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-blue-500 to-purple-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="smartphone" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+                            24 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Electronics</h3>
+                        <p class="text-gray-400 mb-4">Latest tech gadgets, smartphones, laptops, and smart devices for modern living.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Smartphones</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Laptops</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Headphones</span>
+                        </div>
+                        <a href="products.html?category=electronics" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Electronics
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Fashion Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-pink-500 to-rose-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="shirt" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-pink-600 text-white px-3 py-1 rounded-full text-sm">
+                            18 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Fashion</h3>
+                        <p class="text-gray-400 mb-4">Trendy clothing, accessories, and footwear for every style and occasion.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Clothing</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Accessories</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Footwear</span>
+                        </div>
+                        <a href="products.html?category=fashion" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Fashion
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Home & Living Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-green-500 to-teal-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="home" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                            32 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Home & Living</h3>
+                        <p class="text-gray-400 mb-4">Beautiful furniture, decor, and essentials to make your house a home.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Furniture</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Decor</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Kitchen</span>
+                        </div>
+                        <a href="products.html?category=home" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Home & Living
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Sports & Outdoors Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-orange-500 to-red-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="zap" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm">
+                            15 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Sports & Outdoors</h3>
+                        <p class="text-gray-400 mb-4">Gear and equipment for fitness, adventure, and outdoor activities.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Fitness</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Outdoor</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Sports</span>
+                        </div>
+                        <a href="products.html?category=sports" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Sports
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Beauty & Health Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-purple-500 to-indigo-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="heart" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                            21 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Beauty & Health</h3>
+                        <p class="text-gray-400 mb-4">Skincare, wellness products, and beauty essentials for self-care.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Skincare</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Wellness</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Beauty</span>
+                        </div>
+                        <a href="products.html?category=beauty" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Beauty & Health
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Books & Education Category -->
+                <div class="category-card glass rounded-2xl overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-yellow-500 to-amber-600 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="book" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-yellow-600 text-white px-3 py-1 rounded-full text-sm">
+                            12 Products
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-white mb-3">Books & Education</h3>
+                        <p class="text-gray-400 mb-4">Educational materials, books, and learning resources for all ages.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Books</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Education</span>
+                            <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Learning</span>
+                        </div>
+                        <a href="products.html?category=books" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors inline-block">
+                            Browse Books
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Deals Section -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4">Featured Deals</h2>
+                <p class="text-gray-400 text-lg">Limited time offers across all categories</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="text-6xl mb-4">📱</div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Electronics Sale</h3>
+                    <p class="text-gray-400 mb-4">Up to 30% off on selected tech items</p>
+                    <span class="text-purple-400 font-bold text-lg">Ends in 3 days</span>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="text-6xl mb-4">👕</div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Fashion Week</h3>
+                    <p class="text-gray-400 mb-4">Buy 2 get 1 free on all clothing</p>
+                    <span class="text-purple-400 font-bold text-lg">This week only</span>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="text-6xl mb-4">🏠</div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Home Makeover</h3>
+                    <p class="text-gray-400 mb-4">25% off home decor and furniture</p>
+                    <span class="text-purple-400 font-bold text-lg">Limited time</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">Stay Updated</h2>
+            <p class="text-xl text-gray-200 mb-8">Get the latest deals and product updates delivered to your inbox</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <button class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home & Living</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 glass-dark transform translate-x-full transition-transform z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">Shopping Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="border-t border-gray-600 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-white">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-white">$0.00</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
+
+    <script>
+        lucide.createIcons();
+
+        let cart = [];
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>

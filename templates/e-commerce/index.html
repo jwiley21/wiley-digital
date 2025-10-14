@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Store - Premium E-commerce Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        /* Modern gradient background */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glass morphism effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Product hover effects */
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Shopping cart animation */
+        .cart-bounce {
+            animation: cartBounce 0.3s ease-in-out;
+        }
+
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-purple-300 transition-colors">Products</a>
+                    <a href="categories.html" class="text-white hover:text-purple-300 transition-colors">Categories</a>
+                    <a href="about.html" class="text-white hover:text-purple-300 transition-colors">About</a>
+                    <a href="contact.html" class="text-white hover:text-purple-300 transition-colors">Contact</a>
+                </div>
+
+                <!-- Cart & User Actions -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleSearch()">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-dark">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-white hover:bg-purple-700 rounded-md">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-white hover:bg-purple-700 rounded-md">Products</a>
+                <a href="categories.html" class="block px-3 py-2 text-white hover:bg-purple-700 rounded-md">Categories</a>
+                <a href="about.html" class="block px-3 py-2 text-white hover:bg-purple-700 rounded-md">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-white hover:bg-purple-700 rounded-md">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center gradient-bg">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 fade-in">
+                Premium Products,
+                <span class="block text-yellow-300">Unbeatable Prices</span>
+            </h1>
+            <p class="text-xl text-gray-200 mb-8 fade-in">
+                Discover our curated collection of high-quality products designed for modern living
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center fade-in">
+                <a href="products.html" class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Shop Now
+                </a>
+                <a href="categories.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-700 transition-colors">
+                    Browse Categories
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white mb-4">Shop by Category</h2>
+                <p class="text-gray-400 text-lg">Find exactly what you're looking for</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Electronics</h3>
+                    <p class="text-gray-400 mb-4">Latest tech gadgets and accessories</p>
+                    <a href="categories.html?category=electronics" class="text-purple-400 hover:text-purple-300 font-medium">
+                        Shop Electronics →
+                    </a>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="shirt" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Fashion</h3>
+                    <p class="text-gray-400 mb-4">Trendy clothing and accessories</p>
+                    <a href="categories.html?category=fashion" class="text-purple-400 hover:text-purple-300 font-medium">
+                        Shop Fashion →
+                    </a>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="home" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Home & Living</h3>
+                    <p class="text-gray-400 mb-4">Beautiful items for your space</p>
+                    <a href="categories.html?category=home" class="text-purple-400 hover:text-purple-300 font-medium">
+                        Shop Home →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white mb-4">Featured Products</h2>
+                <p class="text-gray-400 text-lg">Hand-picked items just for you</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card glass rounded-2xl overflow-hidden fade-in">
+                    <div class="aspect-square bg-gradient-to-br from-purple-500 to-blue-500 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="headphones" class="w-16 h-16 text-white"></i>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-red-500 text-white px-2 py-1 rounded-full text-sm">Sale</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Premium Headphones</h3>
+                        <p class="text-gray-400 text-sm mb-4">Wireless noise-canceling headphones</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-white">$199</span>
+                            <button onclick="addToCart('headphones')" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card glass rounded-2xl overflow-hidden fade-in">
+                    <div class="aspect-square bg-gradient-to-br from-green-500 to-teal-500 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="watch" class="w-16 h-16 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Smart Watch</h3>
+                        <p class="text-gray-400 text-sm mb-4">Fitness tracking and notifications</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-white">$299</span>
+                            <button onclick="addToCart('watch')" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card glass rounded-2xl overflow-hidden fade-in">
+                    <div class="aspect-square bg-gradient-to-br from-pink-500 to-rose-500 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="backpack" class="w-16 h-16 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Travel Backpack</h3>
+                        <p class="text-gray-400 text-sm mb-4">Durable and spacious design</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-white">$79</span>
+                            <button onclick="addToCart('backpack')" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card glass rounded-2xl overflow-hidden fade-in">
+                    <div class="aspect-square bg-gradient-to-br from-orange-500 to-yellow-500 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="coffee" class="w-16 h-16 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Coffee Maker</h3>
+                        <p class="text-gray-400 text-sm mb-4">Professional espresso machine</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-white">$449</span>
+                            <button onclick="addToCart('coffee')" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 fade-in">
+                <a href="products.html" class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="truck" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Free Shipping</h3>
+                    <p class="text-gray-400">Free delivery on orders over $100</p>
+                </div>
+
+                <div class="text-center fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Secure Payment</h3>
+                    <p class="text-gray-400">100% secure and encrypted transactions</p>
+                </div>
+
+                <div class="text-center fade-in">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="headphones" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">24/7 Support</h3>
+                    <p class="text-gray-400">Round-the-clock customer assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4 fade-in">Stay Updated</h2>
+            <p class="text-xl text-gray-200 mb-8 fade-in">Get the latest deals and product updates delivered to your inbox</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto fade-in">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <button class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Shipping Info</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="categories.html?category=electronics" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="categories.html?category=fashion" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                        <li><a href="categories.html?category=home" class="text-gray-400 hover:text-white transition-colors">Home & Living</a></li>
+                        <li><a href="categories.html?category=sports" class="text-gray-400 hover:text-white transition-colors">Sports & Outdoors</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Your Order</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 glass-dark transform translate-x-full transition-transform z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">Shopping Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="space-y-4 mb-6">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            
+            <div class="border-t border-gray-600 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-white">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-white">$0.00</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Shopping cart functionality
+        let cart = [];
+        let cartTotal = 0;
+
+        function addToCart(productId) {
+            const products = {
+                'headphones': { name: 'Premium Headphones', price: 199 },
+                'watch': { name: 'Smart Watch', price: 299 },
+                'backpack': { name: 'Travel Backpack', price: 79 },
+                'coffee': { name: 'Coffee Maker', price: 449 }
+            };
+
+            const product = products[productId];
+            if (product) {
+                cart.push({ ...product, id: productId });
+                updateCartUI();
+                
+                // Add bounce animation to cart icon
+                const cartIcon = document.querySelector('#cart-count').parentElement;
+                cartIcon.classList.add('cart-bounce');
+                setTimeout(() => cartIcon.classList.remove('cart-bounce'), 300);
+            }
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+
+            cartCount.textContent = cart.length;
+            cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotalElement.textContent = `$${cartTotal.toFixed(2)}`;
+
+            // Update cart items display
+            cartItems.innerHTML = '';
+            cart.forEach((item, index) => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex justify-between items-center p-3 glass rounded-lg';
+                cartItem.innerHTML = `
+                    <div>
+                        <h4 class="text-white font-medium">${item.name}</h4>
+                        <p class="text-gray-400">$${item.price}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+
+            lucide.createIcons();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleSearch() {
+            // Implement search functionality
+            alert('Search functionality would be implemented here');
+        }
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize scroll animations
+        window.addEventListener('scroll', handleScrollAnimations);
+        document.addEventListener('DOMContentLoaded', () => {
+            handleScrollAnimations();
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>

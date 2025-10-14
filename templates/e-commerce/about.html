@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Apex Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-purple-300 transition-colors">Products</a>
+                    <a href="categories.html" class="text-white hover:text-purple-300 transition-colors">Categories</a>
+                    <a href="about.html" class="text-purple-300 font-medium">About</a>
+                    <a href="contact.html" class="text-white hover:text-purple-300 transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-8 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">About Apex Store</h1>
+            <p class="text-xl text-gray-200">Discover the story behind our passion for premium products</p>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-white mb-6">Our Story</h2>
+                    <p class="text-gray-300 text-lg mb-6">
+                        Founded in 2020, Apex Store began with a simple mission: to curate and deliver exceptional products 
+                        that enhance everyday life. What started as a small online boutique has grown into a trusted destination 
+                        for premium goods across multiple categories.
+                    </p>
+                    <p class="text-gray-300 text-lg mb-6">
+                        We believe that quality shouldn't be a luxury. That's why we work directly with manufacturers and 
+                        artisans worldwide to bring you products that combine superior craftsmanship with accessible pricing.
+                    </p>
+                    <p class="text-gray-300 text-lg">
+                        Today, we're proud to serve customers globally, maintaining our commitment to quality, authenticity, 
+                        and exceptional customer service.
+                    </p>
+                </div>
+                <div class="glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Award-Winning Service</h3>
+                    <p class="text-gray-300 mb-6">Recognized for excellence in customer satisfaction and product quality</p>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <div class="text-3xl font-bold gradient-text">50K+</div>
+                            <div class="text-gray-400">Happy Customers</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold gradient-text">1000+</div>
+                            <div class="text-gray-400">Products</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4">Our Values</h2>
+                <p class="text-gray-400 text-lg">The principles that guide everything we do</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="star" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4">Quality First</h3>
+                    <p class="text-gray-400">
+                        We meticulously test and curate every product to ensure it meets our high standards 
+                        for quality and durability.
+                    </p>
+                </div>
+
+                <div class="glass rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="heart" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4">Customer-Centric</h3>
+                    <p class="text-gray-400">
+                        Our customers are at the heart of everything we do. We listen, adapt, and continuously 
+                        improve based on your feedback.
+                    </p>
+                </div>
+
+                <div class="glass rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="leaf" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4">Sustainability</h3>
+                    <p class="text-gray-400">
+                        We're committed to sustainable practices, from eco-friendly packaging to partnering 
+                        with responsible manufacturers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4">Meet Our Team</h2>
+                <p class="text-gray-400 text-lg">The passionate people behind Apex Store</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sarah Johnson</h3>
+                    <p class="text-purple-400 mb-3">Founder & CEO</p>
+                    <p class="text-gray-400 text-sm">
+                        With 15 years of retail experience, Sarah leads our vision of making premium products accessible to everyone.
+                    </p>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Michael Chen</h3>
+                    <p class="text-purple-400 mb-3">Head of Product</p>
+                    <p class="text-gray-400 text-sm">
+                        Michael oversees our product curation process, ensuring every item meets our quality standards.
+                    </p>
+                </div>
+
+                <div class="glass rounded-2xl p-6 text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center">
+                        <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Emma Rodriguez</h3>
+                    <p class="text-purple-400 mb-3">Customer Experience Lead</p>
+                    <p class="text-gray-400 text-sm">
+                        Emma ensures every customer interaction exceeds expectations and builds lasting relationships.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Milestones -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4">Our Journey</h2>
+                <p class="text-gray-400 text-lg">Key milestones in our growth story</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="space-y-8">
+                    <div class="flex items-center space-x-6">
+                        <div class="flex-shrink-0 w-16 h-16 gradient-bg rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">2020</span>
+                        </div>
+                        <div class="glass rounded-lg p-6 flex-1">
+                            <h3 class="text-xl font-semibold text-white mb-2">Company Founded</h3>
+                            <p class="text-gray-400">Started with a vision to bring premium products to everyone</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6">
+                        <div class="flex-shrink-0 w-16 h-16 gradient-bg rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">2021</span>
+                        </div>
+                        <div class="glass rounded-lg p-6 flex-1">
+                            <h3 class="text-xl font-semibold text-white mb-2">10,000 Customers</h3>
+                            <p class="text-gray-400">Reached our first major milestone with amazing customer support</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6">
+                        <div class="flex-shrink-0 w-16 h-16 gradient-bg rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">2023</span>
+                        </div>
+                        <div class="glass rounded-lg p-6 flex-1">
+                            <h3 class="text-xl font-semibold text-white mb-2">Global Expansion</h3>
+                            <p class="text-gray-400">Expanded to serve customers in 25+ countries worldwide</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6">
+                        <div class="flex-shrink-0 w-16 h-16 gradient-bg rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">2024</span>
+                        </div>
+                        <div class="glass rounded-lg p-6 flex-1">
+                            <h3 class="text-xl font-semibold text-white mb-2">Sustainability Initiative</h3>
+                            <p class="text-gray-400">Launched our eco-friendly packaging and carbon-neutral shipping</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">Join Our Community</h2>
+            <p class="text-xl text-gray-200 mb-8">
+                Be part of our journey and discover amazing products that enhance your lifestyle
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="products.html" class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Shop Now
+                </a>
+                <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-700 transition-colors">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home & Living</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 glass-dark transform translate-x-full transition-transform z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">Shopping Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="border-t border-gray-600 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-white">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-white">$0.00</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
+
+    <script>
+        lucide.createIcons();
+
+        let cart = [];
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>

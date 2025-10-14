@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/templates/e-commerce/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Apex Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Apex Store</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-purple-300 transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-purple-300 transition-colors">Products</a>
+                    <a href="categories.html" class="text-white hover:text-purple-300 transition-colors">Categories</a>
+                    <a href="about.html" class="text-white hover:text-purple-300 transition-colors">About</a>
+                    <a href="contact.html" class="text-purple-300 font-medium">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-300 transition-colors" onclick="toggleCart()">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </button>
+                    <a href="account.html" class="text-white hover:text-purple-300 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-8 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Get in Touch</h1>
+            <p class="text-xl text-gray-200">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+    </section>
+
+    <!-- Contact Form & Info -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Contact Form -->
+                <div class="glass rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-white mb-6">Send us a Message</h2>
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required
+                                       class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required
+                                       class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                   class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">Phone Number (Optional)</label>
+                            <input type="tel" id="phone" name="phone"
+                                   class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">Subject</label>
+                            <select id="subject" name="subject" required
+                                    class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600">
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Customer Support</option>
+                                <option value="returns">Returns & Exchanges</option>
+                                <option value="wholesale">Wholesale Inquiry</option>
+                                <option value="partnership">Partnership</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" required
+                                      class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-600"
+                                      placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-purple-600 text-white py-4 rounded-lg font-semibold hover:bg-purple-500 transition-colors">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="space-y-8">
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Visit Our Store</h3>
+                                <p class="text-gray-400">Come see our products in person</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            123 Premium Plaza<br>
+                            Downtown District<br>
+                            New York, NY 10001
+                        </p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i data-lucide="phone" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Call Us</h3>
+                                <p class="text-gray-400">Mon-Fri 9AM-6PM EST</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            <a href="tel:+1-555-123-4567" class="hover:text-purple-300 transition-colors">
+                                +1 (555) 123-4567
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i data-lucide="mail" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Email Us</h3>
+                                <p class="text-gray-400">We'll respond within 24 hours</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            <a href="mailto:hello@apexstore.com" class="hover:text-purple-300 transition-colors">
+                                hello@apexstore.com
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center mr-4">
+                                <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Store Hours</h3>
+                                <p class="text-gray-400">Come visit us</p>
+                            </div>
+                        </div>
+                        <div class="text-gray-300 space-y-1">
+                            <p>Monday - Friday: 9:00 AM - 8:00 PM</p>
+                            <p>Saturday: 10:00 AM - 6:00 PM</p>
+                            <p>Sunday: 12:00 PM - 5:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-400 text-lg">Find quick answers to common questions</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="glass rounded-lg">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFAQ(0)">
+                        <span class="text-lg font-medium text-white">What is your return policy?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transform transition-transform" id="faq-icon-0"></i>
+                    </button>
+                    <div class="hidden px-6 pb-4" id="faq-content-0">
+                        <p class="text-gray-300">We offer a 30-day return policy for all items in original condition. Returns are free for defective products, and we provide prepaid return labels for your convenience.</p>
+                    </div>
+                </div>
+
+                <div class="glass rounded-lg">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFAQ(1)">
+                        <span class="text-lg font-medium text-white">How fast is shipping?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transform transition-transform" id="faq-icon-1"></i>
+                    </button>
+                    <div class="hidden px-6 pb-4" id="faq-content-1">
+                        <p class="text-gray-300">We offer free standard shipping (5-7 business days) on orders over $50. Express shipping (2-3 days) and overnight shipping options are also available at checkout.</p>
+                    </div>
+                </div>
+
+                <div class="glass rounded-lg">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFAQ(2)">
+                        <span class="text-lg font-medium text-white">Do you ship internationally?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transform transition-transform" id="faq-icon-2"></i>
+                    </button>
+                    <div class="hidden px-6 pb-4" id="faq-content-2">
+                        <p class="text-gray-300">Yes! We ship to over 50 countries worldwide. International shipping rates and delivery times vary by location. All duties and taxes are calculated at checkout.</p>
+                    </div>
+                </div>
+
+                <div class="glass rounded-lg">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFAQ(3)">
+                        <span class="text-lg font-medium text-white">What payment methods do you accept?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transform transition-transform" id="faq-icon-3"></i>
+                    </button>
+                    <div class="hidden px-6 pb-4" id="faq-content-3">
+                        <p class="text-gray-300">We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Buy Now Pay Later options through Klarna and Afterpay.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">Stay Connected</h2>
+            <p class="text-xl text-gray-200 mb-8">Subscribe to our newsletter for exclusive deals and updates</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <button class="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Apex Store</h3>
+                    <p class="text-gray-400 mb-4">Your trusted destination for premium products and exceptional service.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Electronics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fashion</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home & Living</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Apex Store. All rights reserved. | Demo template by Wiley Digital</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 glass-dark transform translate-x-full transition-transform z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">Shopping Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="border-t border-gray-600 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-white">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-white">$0.00</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-full font-semibold hover:bg-purple-500 transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
+
+    <script>
+        lucide.createIcons();
+
+        let cart = [];
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleFAQ(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Thank you for your message! We\'ll get back to you soon.');
+                e.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>
