@@ -192,9 +192,16 @@ function addDebugInfo(url) {
 }
 
 function generateQRCode(url, attempt = 1) {
-  const maxAttempts = 5;
+  const maxAttempts = 8; // Increased attempts for better reliability
   console.log(`🔄 QR generation attempt ${attempt}/${maxAttempts}`);
   console.log("QRCode available:", typeof window.QRCode !== 'undefined');
+  
+  // Update debug info if available
+  const qrDebug = document.getElementById('qr-debug');
+  if (qrDebug) {
+    const status = (typeof window.QRCode !== 'undefined') ? "✅ Loaded" : "❌ Not loaded";
+    qrDebug.innerHTML = `<strong>QR Library:</strong> ${status} (Attempt ${attempt}/${maxAttempts})`;
+  }
   
   if (typeof window.QRCode !== 'undefined') {
     try {
@@ -263,14 +270,28 @@ function generateQRCode(url, attempt = 1) {
       els.qr.appendChild(errorDiv);
     }
   } else if (attempt < maxAttempts) {
-    console.warn(`⚠️ QR Code library not ready, retry ${attempt + 1}/${maxAttempts} in ${attempt * 200}ms`);
-    setTimeout(() => generateQRCode(url, attempt + 1), attempt * 200);
+    // Progressive backoff with longer delays
+    const delay = attempt * 400; // 400ms, 800ms, 1200ms, etc.
+    console.warn(`⚠️ QR Code library not ready, retry ${attempt + 1}/${maxAttempts} in ${delay}ms`);
+    setTimeout(() => generateQRCode(url, attempt + 1), delay);
   } else {
     console.error("❌ QR Code library failed to load after multiple attempts");
-    const fallbackDiv = document.createElement('p');
+    const fallbackDiv = document.createElement('div');
+    fallbackDiv.style.textAlign = 'center';
+    fallbackDiv.style.marginTop = '16px';
+    fallbackDiv.style.padding = '16px';
+    fallbackDiv.style.border = '1px dashed var(--muted)';
+    fallbackDiv.style.borderRadius = '8px';
     fallbackDiv.innerHTML = `
-      <p style="color: var(--muted); font-style: italic; margin-top: 16px;">
-        QR code unavailable - copy the URL above to share
+      <p style="color: var(--muted); margin-bottom: 12px;">
+        ⚠️ QR code generation unavailable
+      </p>
+      <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 12px;">
+        Copy the URL above to share with other devices
+      </p>
+      <button onclick="location.reload()" style="padding: 8px 16px; background: var(--brand); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
+        Reload Page
+      </button>
       </p>
     `;
     els.qr.appendChild(fallbackDiv);
@@ -794,6 +815,11 @@ els.file.addEventListener("change", (e) => {
 // Initialize and check compatibility
 document.addEventListener('DOMContentLoaded', () => {
   console.log("🚀 Instant Share loading...");
+  
+  // Check QR library availability
+  const qrAvailable = typeof window.QRCode !== 'undefined';
+  console.log("📱 QR Library status:", qrAvailable ? "✅ Available" : "⚠️ Not loaded yet");
+  
   const compat = checkSafariCompatibility();
   
   if (compat.isIOS || compat.isSafari) {

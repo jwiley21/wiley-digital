@@ -366,8 +366,49 @@
 
   <!-- Ably JS SDK (global Ably object) -->
   <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-  <!-- QR Code generator -->
-  <script src="https://unpkg.com/qrcode/build/qrcode.min.js"></script>
+  <!-- QR Code generator with fallback loading -->
+  <script>
+    // Enhanced QR library loading with fallbacks
+    function loadQRLibrary() {
+      const qrSources = [
+        'https://unpkg.com/qrcode/build/qrcode.min.js',
+        'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js'
+      ];
+      
+      let attempts = 0;
+      
+      function tryLoadScript() {
+        if (typeof window.QRCode !== 'undefined') {
+          console.log('✅ QR Code library already available');
+          return;
+        }
+        
+        if (attempts >= qrSources.length) {
+          console.error('❌ All QR Code library sources failed to load');
+          return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = qrSources[attempts];
+        script.onload = () => {
+          console.log(`✅ QR Code library loaded from: ${qrSources[attempts]}`);
+        };
+        script.onerror = () => {
+          console.warn(`⚠️ Failed to load QR library from: ${qrSources[attempts]}`);
+          attempts++;
+          setTimeout(tryLoadScript, 500); // Try next source after delay
+        };
+        document.head.appendChild(script);
+        attempts++;
+      }
+      
+      tryLoadScript();
+    }
+    
+    // Start loading QR library
+    loadQRLibrary();
+  </script>
   <!-- Instant Share App - load after dependencies -->
   <script defer src="instant-share-app.js"></script>
 </body>
