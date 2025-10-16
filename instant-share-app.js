@@ -207,9 +207,19 @@ function generateQRCode(url, attempt = 1) {
     try {
       console.log("📱 Generating QR code for:", url);
       
+      // Clear any existing QR container first
+      const existingQR = document.getElementById('qr-container');
+      if (existingQR) {
+        existingQR.remove();
+      }
+      
       const qrContainer = document.createElement('div');
       qrContainer.style.textAlign = 'center';
       qrContainer.style.marginTop = '16px';
+      qrContainer.style.padding = '16px';
+      qrContainer.style.backgroundColor = 'rgba(255,255,255,0.05)';
+      qrContainer.style.borderRadius = '12px';
+      qrContainer.style.border = '1px solid rgba(255,255,255,0.1)';
       qrContainer.id = 'qr-container';
       
       const qrTitle = document.createElement('p');
@@ -219,55 +229,91 @@ function generateQRCode(url, attempt = 1) {
       qrTitle.style.color = 'var(--muted)';
       qrContainer.appendChild(qrTitle);
       
-      // Create a loading message
-      const loadingMsg = document.createElement('p');
-      loadingMsg.textContent = 'Generating QR code...';
-      loadingMsg.style.color = 'var(--muted)';
-      loadingMsg.style.fontStyle = 'italic';
-      qrContainer.appendChild(loadingMsg);
-      
       els.qr.appendChild(qrContainer);
+      console.log("📦 QR container added to DOM");
+      
+      // Generate QR code directly to canvas
+      const canvas = document.createElement('canvas');
+      canvas.style.borderRadius = '8px';
+      canvas.style.backgroundColor = '#ffffff';
+      canvas.style.padding = '12px';
+      canvas.style.display = 'block';
+      canvas.style.margin = '0 auto';
+      canvas.style.maxWidth = '200px';
+      canvas.style.height = 'auto';
+      
+      qrContainer.appendChild(canvas);
       
       // Generate QR code
-      window.QRCode.toCanvas(url, { 
+      window.QRCode.toCanvas(canvas, url, { 
         width: 200, 
         margin: 2,
         color: {
-          dark: '#e5e7eb',
-          light: '#0b0d12'
+          dark: '#000000',  // Black QR code
+          light: '#ffffff'  // White background
         }
-      }, (err, canvas) => {
-        // Remove loading message
-        if (loadingMsg.parentNode) {
-          loadingMsg.remove();
-        }
-        
-        if (!err && canvas) {
-          canvas.style.borderRadius = '12px';
-          canvas.style.background = '#e5e7eb';
-          canvas.style.padding = '8px';
-          canvas.style.display = 'block';
-          canvas.style.margin = '0 auto';
-          qrContainer.appendChild(canvas);
+      }, (err) => {
+        if (!err) {
           console.log("✅ QR code generated successfully");
         } else {
           console.error("❌ QR canvas generation failed:", err);
+          canvas.remove();
           const errorMsg = document.createElement('p');
-          errorMsg.textContent = 'QR code generation failed - use the URL above';
+          errorMsg.textContent = '⚠️ QR code generation failed - use the URL above';
           errorMsg.style.color = 'var(--muted)';
           errorMsg.style.fontStyle = 'italic';
+          errorMsg.style.margin = '20px 0';
           qrContainer.appendChild(errorMsg);
         }
       });
       
     } catch (error) {
       console.error("❌ QR code generation error:", error);
-      const errorDiv = document.createElement('p');
-      errorDiv.textContent = 'QR code generation failed - use the URL above';
-      errorDiv.style.color = 'var(--muted)';
-      errorDiv.style.fontStyle = 'italic';
-      errorDiv.style.marginTop = '16px';
-      els.qr.appendChild(errorDiv);
+      console.log("🔄 Trying fallback QR generation method...");
+      
+      // Try fallback method with DataURL
+      try {
+        window.QRCode.toDataURL(url, { 
+          width: 200, 
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#ffffff'
+          }
+        }, (err, dataUrl) => {
+          if (!err && dataUrl) {
+            const img = document.createElement('img');
+            img.src = dataUrl;
+            img.style.borderRadius = '8px';
+            img.style.backgroundColor = '#ffffff';
+            img.style.padding = '12px';
+            img.style.display = 'block';
+            img.style.margin = '16px auto';
+            img.style.maxWidth = '200px';
+            
+            const qrContainer = document.getElementById('qr-container') || document.createElement('div');
+            qrContainer.appendChild(img);
+            
+            if (!document.getElementById('qr-container')) {
+              qrContainer.id = 'qr-container';
+              qrContainer.style.textAlign = 'center';
+              els.qr.appendChild(qrContainer);
+            }
+            
+            console.log("✅ Fallback QR code generated successfully");
+          } else {
+            throw new Error('Fallback QR generation failed');
+          }
+        });
+      } catch (fallbackError) {
+        console.error("❌ Fallback QR generation also failed:", fallbackError);
+        const errorDiv = document.createElement('p');
+        errorDiv.textContent = '⚠️ QR code generation failed - use the URL above';
+        errorDiv.style.color = 'var(--muted)';
+        errorDiv.style.fontStyle = 'italic';
+        errorDiv.style.marginTop = '16px';
+        els.qr.appendChild(errorDiv);
+      }
     }
   } else if (attempt < maxAttempts) {
     // Progressive backoff with longer delays
